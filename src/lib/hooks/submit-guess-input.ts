@@ -5,8 +5,8 @@ import { useSetScore } from '../state/score'
 import { useWord } from '../state/word'
 import useNextWord from './next-word'
 import useResetGuessInput from './reset-guess-input'
-import { useSetSettings, useSettings } from '../state/settings'
-import { useSetGameState } from '../state/stage'
+import useResetTimer from './reset-timer'
+import useStrike from './strike'
 
 export default function useSubmitGuessInput() {
   const { word } = useWord()
@@ -15,42 +15,33 @@ export default function useSubmitGuessInput() {
   const nextWord = useNextWord()
   const setScore = useSetScore()
   const gameMode = useGameMode()
-  const { strikes } = useSettings()
-  const setSettings = useSetSettings()
-  const setGameState = useSetGameState()
+  const strike = useStrike()
+  const resetTimer = useResetTimer()
 
   const correct = useCallback(() => {
     setGuessState('correct')
     setTimeout(() => {
       setScore((prev) => prev + 1)
       if (gameMode === 'rush') {
-        setSettings((prev) => ({ ...prev, time: 10 }))
+        resetTimer()
       }
       nextWord()
     }, 1000)
-  }, [setGuessState, setScore, gameMode, nextWord, setSettings])
+  }, [setGuessState, setScore, gameMode, nextWord, resetTimer])
 
   const incorrect = useCallback(() => {
     setGuessState('incorrect')
     setTimeout(() => {
       resetGuessInput()
       if (gameMode !== 'chill') {
-        const newStrikes = strikes - 1
-        if (newStrikes === 0) {
-          setGameState('over')
-        } else {
-          setSettings((prev) => ({ ...prev, strikes: newStrikes }))
+        const left = strike()
+        if (left > 0 && gameMode === 'rush') {
+          resetTimer()
         }
+        nextWord()
       }
     }, 1000)
-  }, [
-    setGuessState,
-    resetGuessInput,
-    gameMode,
-    setGameState,
-    strikes,
-    setSettings,
-  ])
+  }, [setGuessState, resetGuessInput, gameMode, strike, resetTimer, nextWord])
 
   return useCallback(
     (value: string) => {

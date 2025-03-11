@@ -1,31 +1,54 @@
-import { useSettings } from '../state/settings'
-import { useEffect, useRef, useState } from 'react'
+import useSubmitGuessInput from '../hooks/submit-guess-input'
+import { useGameMode } from '../state/mode'
+import { useSetSettings, useSettings } from '../state/settings'
+import { useEffect, useRef } from 'react'
 
 export default function Timer() {
   const progressRef = useRef<HTMLDivElement>(null)
   const { time } = useSettings()
-  const [seconds, setSeconds] = useState(time)
+  const setSettings = useSetSettings()
+  const gameMode = useGameMode()
+  const timerRef = useRef<number | null>(null)
+
+  const originalTime =
+    gameMode === 'rush'
+      ? 10
+      : gameMode === 'sprint'
+        ? 60
+        : Number.POSITIVE_INFINITY
+
+  const submitGuessInput = useSubmitGuessInput()
 
   useEffect(() => {
-    if (seconds === Number.POSITIVE_INFINITY) {
+    if (time === Number.POSITIVE_INFINITY) {
       return
     }
 
-    if (seconds > 0) {
-      const interval = setInterval(() => {
-        const newSeconds = seconds - 1
-        setSeconds(newSeconds)
+    if (time > 0) {
+      timerRef.current = setInterval(() => {
+        const newTime = time - 1
+        setSettings((prev) => ({ ...prev, time: newTime }))
         progressRef.current?.style.setProperty(
           '--progress',
-          `${(newSeconds / time) * 100}%`,
+          `${(newTime / originalTime) * 100}%`,
         )
-        if (newSeconds === 0) {
-          clearInterval(interval)
+        if (newTime === 0) {
+          submitGuessInput('')
+          if (timerRef.current) {
+            clearInterval(timerRef.current)
+            timerRef.current = null
+          }
         }
       }, 1000)
-      return () => clearInterval(interval)
     }
-  }, [seconds, time])
+
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current)
+        timerRef.current = null
+      }
+    }
+  }, [time, submitGuessInput, setSettings, originalTime])
 
   if (time === Number.POSITIVE_INFINITY) {
     return null

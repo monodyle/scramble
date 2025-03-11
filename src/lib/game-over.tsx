@@ -1,4 +1,8 @@
+import useBackToTitle from './hooks/back-to-title'
+
 export default function GameOverScreen() {
+  const backToTitle = useBackToTitle()
+
   return (
     <div className="text-center">
       <h1 className="font-serif text-3xl font-semibold text-center text-primary">
@@ -17,8 +21,9 @@ export default function GameOverScreen() {
         <button
           type="button"
           className="px-4 py-1.5 font-serif font-semibold transition-colors transform rounded-lg text-primary bg-primary/4 hover:bg-primary/8 w-36"
+          onClick={backToTitle}
         >
-          Back to Menu
+          Back to Title
         </button>
       </div>
     </div>
