@@ -1,3 +1,5 @@
+import { GuessStateProvider } from './guess'
+import { InputProvider } from './input'
 import { GameModeProvider } from './mode'
 import { ScoreProvider } from './score'
 import { SettingsProvider } from './settings'
@@ -12,7 +14,11 @@ export default function Providers({ children }: React.PropsWithChildren) {
         <GameStateProvider>
           <SettingsProvider>
             <WordProvider>
-              <GameModeProvider>{children}</GameModeProvider>
+              <GameModeProvider>
+                <GuessStateProvider>
+                  <InputProvider>{children}</InputProvider>
+                </GuessStateProvider>
+              </GameModeProvider>
             </WordProvider>
           </SettingsProvider>
         </GameStateProvider>

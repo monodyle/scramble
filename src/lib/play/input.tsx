@@ -1,7 +1,47 @@
+import { useEffect } from 'react'
+import useUpdateGuessInput from '../hooks/update-guess-input'
+import { useGuessState } from '../state/guess'
+import { useInput } from '../state/input'
 import { useWord } from '../state/word'
 
 export default function Input() {
-  const { word } = useWord()
+  const { word, scrambled } = useWord()
+  const { input, usedIndices } = useInput()
+  const guessState = useGuessState()
+  const { update, backspace } = useUpdateGuessInput()
+
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (guessState === 'correct') return
+
+      if (e.key === 'Backspace') {
+        backspace()
+      } else if (/^[a-zA-Z]$/.test(e.key) && input.length < word.length) {
+        const keyLower = e.key.toLowerCase()
+        const availableIndex = scrambled
+          .split('')
+          .findIndex(
+            (char, index) =>
+              char.toLowerCase() === keyLower && !usedIndices.includes(index),
+          )
+
+        if (availableIndex !== -1) {
+          update(scrambled[availableIndex], availableIndex)
+        }
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyPress)
+    return () => window.removeEventListener('keydown', handleKeyPress)
+  }, [
+    backspace,
+    input.length,
+    scrambled,
+    update,
+    usedIndices,
+    word.length,
+    guessState,
+  ])
 
   return (
     <div className="flex items-center justify-center gap-1">
@@ -10,11 +50,15 @@ export default function Input() {
           key={index}
           className={[
             'text-xl size-12 rounded-lg font-semibold select-none flex items-center justify-center border-2 text-violet',
-            index === 0
+            index === input.length
               ? 'border-violet bg-violet/5'
-              : 'border-violet/20 bg-violet/5',
+              : index < input.length
+                ? 'border-violet/20 bg-violet/5'
+                : 'border-border bg-elevated',
           ].join(' ')}
-        />
+        >
+          {input[index]}
+        </div>
       ))}
     </div>
   )

@@ -2,6 +2,7 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from 'react'
@@ -13,7 +14,7 @@ const WordGetter = createContext<{
 } | null>(null)
 const WordSetter = createContext<((word: string) => void) | null>(null)
 
-function scrambleWord(word: string): string {
+function scramble(word: string): string {
   if (word.length === 0) {
     return ''
   }
@@ -24,12 +25,17 @@ function scrambleWord(word: string): string {
     ;[letters[i], letters[j]] = [letters[j], letters[i]]
   }
   const scrambled = letters.join('')
-  return scrambled === word ? scrambleWord(word) : scrambled
+  return scrambled === word ? scramble(word) : scrambled
 }
 
 export function WordProvider({ children }: React.PropsWithChildren) {
   const [word, setWord] = useState('hello')
-  const scrambled = useMemo(() => scrambleWord(word), [word])
+  const scrambled = useMemo(() => scramble(word), [word])
+
+  // DEBUG
+  useEffect(() => {
+    console.debug('original word', word)
+  }, [word])
 
   return (
     <WordGetter.Provider value={{ word, scrambled }}>

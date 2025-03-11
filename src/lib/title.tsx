@@ -1,7 +1,7 @@
-import { useStart } from './hooks/start'
+import useStartGame from './hooks/start-game'
 
 export default function TitleScreen() {
-  const start = useStart()
+  const start = useStartGame()
 
   return (
     <div className="space-y-4">

@@ -1,8 +1,8 @@
 import { ArrowLeft, CircleHelp, Volume2 } from 'lucide-react'
-import { useBack } from '../hooks/back'
+import useBackToTitle from '../hooks/back-to-title'
 
 export default function Actions() {
-  const back = useBack()
+  const back = useBackToTitle()
 
   return (
     <div className="flex gap-1">

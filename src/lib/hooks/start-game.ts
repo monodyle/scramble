@@ -5,7 +5,7 @@ import { type GameMode, useSetGameMode } from '../state/mode'
 import { useRandomizeWord } from '../state/word'
 import { useSetScore } from '../state/score'
 
-export function useStart() {
+export default function useStartGame() {
   const setGameMode = useSetGameMode()
   const setGameState = useSetGameState()
   const setDefaultSettings = useSetDefaultSettings()
