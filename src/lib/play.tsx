@@ -2,11 +2,13 @@ import { ArrowLeft, CircleHelp, Volume2 } from 'lucide-react'
 import { useSettings } from './state/settings'
 import { useWord } from './state/word'
 import { useBack } from './hooks/back'
+import { useScore } from './state/score'
 
 export default function PlayScreen() {
   const { strikes } = useSettings()
   const { word, scrambled } = useWord()
   const back = useBack()
+  const score = useScore()
 
   return (
     <div className="flex-1 w-full h-full space-y-4">
@@ -32,7 +34,7 @@ export default function PlayScreen() {
             <CircleHelp className="size-5" />
           </button>
         </div>
-        <div className="font-serif font-medium">Score: 0</div>
+        <div className="font-serif font-medium">Score: {score}</div>
         <div>❤️ × {strikes === Number.POSITIVE_INFINITY ? '∞' : strikes}</div>
       </div>
       <div className="h-32" />
