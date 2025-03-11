@@ -1,9 +1,11 @@
+import TitleScreen from './lib/title'
+
 export default function App() {
   return (
     <main className="flex flex-col min-h-screen bg-base">
       <div className="flex flex-col flex-1 w-full max-w-2xl px-5 py-4 mx-auto">
         <div className="flex flex-col items-center justify-center flex-1 w-full mx-auto space-y-4 border border-border rounded-xl">
-          hello!
+          <TitleScreen />
         </div>
       </div>
       <footer className="px-5 py-4">
