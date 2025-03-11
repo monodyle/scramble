@@ -1,5 +1,7 @@
+import { useSelectGameMode } from './state/mode'
+
 export default function TitleScreen() {
-  const selectMode = console.log
+  const selectMode = useSelectGameMode()
 
   return (
     <div className="space-y-4">
@@ -16,47 +18,60 @@ export default function TitleScreen() {
           </span>
         ))}
       </h1>
-      <div className="h-9" />
       <h2 className="font-serif text-xl font-bold text-center text-primary">
         Game Modes
       </h2>
-      <div className="flex flex-col w-full gap-4">
-        <button
-          type="button"
-          onClick={() => selectMode('chill')}
-          className="px-4 py-2 transition-colors transform border border-transparent rounded-lg bg-primary/4 hover:border-border hover:bg-primary/8"
-        >
-          <h3 className="font-serif text-lg font-semibold text-primary">
-            Chill
-          </h3>
-          <p className="w-2/3 mx-auto text-sm text-primary/60 text-balance">
-            Unlimited guesses - Perfect for learning and practice!
-          </p>
-        </button>
-        <button
-          type="button"
-          onClick={() => selectMode('medium')}
-          className="px-4 py-2 transition-colors transform border border-transparent rounded-lg bg-primary/4 hover:border-border hover:bg-primary/8"
-        >
-          <h3 className="font-serif text-lg font-semibold text-primary">
-            Medium
-          </h3>
-          <p className="w-2/3 mx-auto text-sm text-primary/60 text-balance">
-            3 lives - Test your skills with limited chances!
-          </p>
-        </button>
-        <button
-          type="button"
-          onClick={() => selectMode('challenge')}
-          className="px-4 py-2 transition-colors transform border border-transparent rounded-lg bg-primary/4 hover:border-border hover:bg-primary/8"
-        >
-          <h3 className="font-serif text-lg font-semibold text-primary">
-            Challenger
-          </h3>
-          <p className="w-2/3 mx-auto text-sm text-primary/60 text-balance">
-            3 lives and 30 seconds - Race against the clock!
-          </p>
-        </button>
+      <div className="px-4 md:px-24">
+        <div className="grid w-full grid-cols-2 grid-rows-2 gap-2">
+          <button
+            type="button"
+            onClick={() => selectMode('chill')}
+            className="px-4 py-2 transition-colors transform border border-transparent rounded-lg bg-primary/4 hover:border-border hover:bg-primary/8"
+          >
+            <h3 className="font-serif text-lg font-semibold text-primary">
+              Chilling
+            </h3>
+            <p className="text-sm text-primary/60 text-balance">
+              Unlimited guesses - Perfect for learning and practice!
+            </p>
+          </button>
+          <button
+            type="button"
+            onClick={() => selectMode('strike')}
+            className="px-4 py-2 transition-colors transform border border-transparent rounded-lg bg-primary/4 hover:border-border hover:bg-primary/8"
+          >
+            <h3 className="font-serif text-lg font-semibold text-primary">
+              Three Strikes
+            </h3>
+            <p className="text-sm text-primary/60 text-balance">
+              3 strikes, that's it, and you're out
+            </p>
+          </button>
+          <button
+            type="button"
+            onClick={() => selectMode('rush')}
+            className="px-4 py-2 transition-colors transform border border-transparent rounded-lg bg-primary/4 hover:border-border hover:bg-primary/8"
+          >
+            <h3 className="font-serif text-lg font-semibold text-primary">
+              Rush Riddle
+            </h3>
+            <p className="text-sm text-primary/60 text-balance">
+              10 seconds for each riddle, also 3 strikes
+            </p>
+          </button>
+          <button
+            type="button"
+            onClick={() => selectMode('sprint')}
+            className="px-4 py-2 transition-colors transform border border-transparent rounded-lg bg-primary/4 hover:border-border hover:bg-primary/8"
+          >
+            <h3 className="font-serif text-lg font-semibold text-primary">
+              Sprinter
+            </h3>
+            <p className="text-sm text-primary/60 text-balance">
+              Try to survive with one strike for 60 seconds
+            </p>
+          </button>
+        </div>
       </div>
       <div className="h-24" />
     </div>
