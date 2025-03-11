@@ -1,10 +1,13 @@
 import { GameModeProvider } from './mode'
 import { SettingsProvider } from './settings'
+import { GameStateProvider } from './stage'
 
 export default function Providers({ children }: React.PropsWithChildren) {
   return (
-    <SettingsProvider>
-      <GameModeProvider>{children}</GameModeProvider>
-    </SettingsProvider>
+    <GameStateProvider>
+      <SettingsProvider>
+        <GameModeProvider>{children}</GameModeProvider>
+      </SettingsProvider>
+    </GameStateProvider>
   )
 }

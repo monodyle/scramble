@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useState } from 'react'
 import { useSetSettings } from './settings'
+import { useSetGameState } from './stage'
 
 type GameMode = 'chill' | 'strike' | 'rush' | 'sprint' | null
 
@@ -25,10 +26,12 @@ export function useGameMode() {
 export function useSelectGameMode() {
   const setter = useContext(GameModeSetter)
   const setSettings = useSetSettings()
+  const setGameState = useSetGameState()
 
   const selectMode = useCallback(
     (mode: GameMode) => {
       setter(mode)
+      setGameState('play')
       if (mode === 'chill') {
         setSettings({
           strikes: Number.POSITIVE_INFINITY,
@@ -42,7 +45,7 @@ export function useSelectGameMode() {
         setSettings({ strikes: 1, time: 60 })
       }
     },
-    [setter, setSettings],
+    [setter, setSettings, setGameState],
   )
 
   return selectMode

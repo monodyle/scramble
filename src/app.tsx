@@ -1,15 +1,17 @@
 import GameOverScreen from './lib/game-over'
 import Layout from './lib/layout'
-import { useGameMode } from './lib/state/mode'
+import PlayScreen from './lib/play'
+import { useGameState } from './lib/state/stage'
 import TitleScreen from './lib/title'
 
 export default function App() {
-  const mode = useGameMode()
+  const state = useGameState()
 
   return (
     <Layout>
-      {mode === null && <TitleScreen />}
-      {mode !== null && <GameOverScreen />}
+      {state === 'title' && <TitleScreen />}
+      {(state === 'play' || state === 'pause') && <PlayScreen />}
+      {state === 'over' && <GameOverScreen />}
     </Layout>
   )
 }
