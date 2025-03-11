@@ -12,6 +12,16 @@
 
   --font-serif: "EB Garamond", serif;
   --font-sans: "IBM Plex Sans", sans-serif;
+
+  @keyframes loading-dots {
+    0%,
+    100% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
 }
 
 @layer base {
