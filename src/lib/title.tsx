@@ -1,7 +1,7 @@
-import { useSelectGameMode } from './state/mode'
+import { useStart } from './hooks/start'
 
 export default function TitleScreen() {
-  const selectMode = useSelectGameMode()
+  const start = useStart()
 
   return (
     <div className="space-y-4">
@@ -25,7 +25,7 @@ export default function TitleScreen() {
         <div className="grid w-full grid-cols-2 grid-rows-2 gap-2">
           <button
             type="button"
-            onClick={() => selectMode('chill')}
+            onClick={() => start('chill')}
             className="px-4 py-2 transition-colors transform border border-transparent rounded-lg bg-primary/4 hover:border-border hover:bg-primary/8"
           >
             <h3 className="font-serif text-lg font-semibold text-primary">
@@ -37,7 +37,7 @@ export default function TitleScreen() {
           </button>
           <button
             type="button"
-            onClick={() => selectMode('strike')}
+            onClick={() => start('strike')}
             className="px-4 py-2 transition-colors transform border border-transparent rounded-lg bg-primary/4 hover:border-border hover:bg-primary/8"
           >
             <h3 className="font-serif text-lg font-semibold text-primary">
@@ -49,7 +49,7 @@ export default function TitleScreen() {
           </button>
           <button
             type="button"
-            onClick={() => selectMode('rush')}
+            onClick={() => start('rush')}
             className="px-4 py-2 transition-colors transform border border-transparent rounded-lg bg-primary/4 hover:border-border hover:bg-primary/8"
           >
             <h3 className="font-serif text-lg font-semibold text-primary">
@@ -61,7 +61,7 @@ export default function TitleScreen() {
           </button>
           <button
             type="button"
-            onClick={() => selectMode('sprint')}
+            onClick={() => start('sprint')}
             className="px-4 py-2 transition-colors transform border border-transparent rounded-lg bg-primary/4 hover:border-border hover:bg-primary/8"
           >
             <h3 className="font-serif text-lg font-semibold text-primary">

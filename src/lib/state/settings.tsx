@@ -1,4 +1,5 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useCallback, useContext, useState } from 'react'
+import type { GameMode } from './mode'
 
 type Settings = {
   strikes: number
@@ -31,4 +32,26 @@ export function useSettings() {
 
 export function useSetSettings() {
   return useContext(SettingsSetter)
+}
+
+export function useSetDefaultSettings() {
+  const setSettings = useSetSettings()
+
+  return useCallback(
+    (mode: GameMode) => {
+      if (mode === 'chill') {
+        setSettings({
+          strikes: Number.POSITIVE_INFINITY,
+          time: Number.POSITIVE_INFINITY,
+        })
+      } else if (mode === 'strike') {
+        setSettings({ strikes: 3, time: Number.POSITIVE_INFINITY })
+      } else if (mode === 'rush') {
+        setSettings({ strikes: 3, time: 10 })
+      } else if (mode === 'sprint') {
+        setSettings({ strikes: 1, time: 60 })
+      }
+    },
+    [setSettings],
+  )
 }

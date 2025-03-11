@@ -1,10 +1,12 @@
 import { ArrowLeft, CircleHelp, Volume2 } from 'lucide-react'
 import { useSettings } from './state/settings'
 import { useWord } from './state/word'
+import { useBack } from './hooks/back'
 
 export default function PlayScreen() {
   const { strikes } = useSettings()
   const { word, scrambled } = useWord()
+  const back = useBack()
 
   return (
     <div className="flex-1 w-full h-full space-y-4">
@@ -12,6 +14,7 @@ export default function PlayScreen() {
         <div className="flex gap-1">
           <button
             type="button"
+            onClick={back}
             className="p-1 bg-transparent border-none text-primary/60 hover:text-primary"
           >
             <ArrowLeft className="size-5" />
