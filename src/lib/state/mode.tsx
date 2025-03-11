@@ -1,9 +1,10 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useCallback, useContext, useState } from 'react'
+import { useSetSettings } from './settings'
 
 type GameMode = 'chill' | 'strike' | 'rush' | 'sprint' | null
 
 const GameModeGetter = createContext<GameMode>(null)
-const GameModeSetter = createContext<((mode: GameMode) => void) | null>(null)
+const GameModeSetter = createContext<(mode: GameMode) => void>(() => {})
 
 export function GameModeProvider({ children }: React.PropsWithChildren) {
   const [mode, setMode] = useState<GameMode>(null)
@@ -23,8 +24,26 @@ export function useGameMode() {
 
 export function useSelectGameMode() {
   const setter = useContext(GameModeSetter)
-  if (!setter) {
-    throw new Error('useSetGameMode must be used within a GameModeProvider')
-  }
-  return setter
+  const setSettings = useSetSettings()
+
+  const selectMode = useCallback(
+    (mode: GameMode) => {
+      setter(mode)
+      if (mode === 'chill') {
+        setSettings({
+          strikes: Number.POSITIVE_INFINITY,
+          time: Number.POSITIVE_INFINITY,
+        })
+      } else if (mode === 'strike') {
+        setSettings({ strikes: 3, time: Number.POSITIVE_INFINITY })
+      } else if (mode === 'rush') {
+        setSettings({ strikes: 3, time: 10 })
+      } else if (mode === 'sprint') {
+        setSettings({ strikes: 1, time: 60 })
+      }
+    },
+    [setter, setSettings],
+  )
+
+  return selectMode
 }
