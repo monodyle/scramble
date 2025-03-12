@@ -53,22 +53,22 @@ export default function useSubmitGuessInput() {
         resetTimer()
       }
       nextWord()
-    }, 500)
+    }, 1000)
   }, [setGuessState, gameMode, nextWord, resetTimer, play, dispatch])
 
   const incorrect = useCallback(() => {
-    setGuessState('incorrect')
     play('incorrect')
+    setGuessState('incorrect')
+    resetGuessInput()
+    const left = strike()
+    if (left > 0 && gameMode === 'rush') {
+      resetTimer()
+    }
     setTimeout(() => {
-      resetGuessInput()
       if (gameMode !== 'chill') {
-        const left = strike()
-        if (left > 0 && gameMode === 'rush') {
-          resetTimer()
-        }
         nextWord()
       }
-    }, 500)
+    }, 1000)
   }, [
     setGuessState,
     resetGuessInput,
