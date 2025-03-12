@@ -4,7 +4,7 @@ import { useSetGuessState } from '../state/guess'
 import { useGameMode } from '../state/mode'
 import { useSetScore } from '../state/score'
 import { useWord } from '../state/word'
-import { useWordSet } from '../state/word-list'
+import { useDictionary } from '../state/dictionary'
 import useNextWord from './next-word'
 import useResetGuessInput from './reset-guess-input'
 import useResetTimer from './reset-timer'
@@ -35,7 +35,7 @@ function canFormSameLetters(word1: string, word2: string): boolean {
 
 export default function useSubmitGuessInput() {
   const { word } = useWord()
-  const wordSet = useWordSet()
+  const { set } = useDictionary()
   const resetGuessInput = useResetGuessInput()
   const setGuessState = useSetGuessState()
   const nextWord = useNextWord()
@@ -92,7 +92,7 @@ export default function useSubmitGuessInput() {
 
       if (
         canFormSameLetters(normalizedInput, normalizedWord) &&
-        wordSet.has(normalizedInput)
+        set.has(normalizedInput)
       ) {
         correct()
         return
@@ -100,6 +100,6 @@ export default function useSubmitGuessInput() {
 
       incorrect()
     },
-    [correct, incorrect, word, wordSet],
+    [correct, incorrect, word, set],
   )
 }

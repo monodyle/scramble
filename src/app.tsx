@@ -9,7 +9,7 @@ export default function App() {
   return (
     <>
       {state === 'title' && <TitleScreen />}
-      {(state === 'play' || state === 'pause') && <PlayScreen />}
+      {state === 'play' && <PlayScreen />}
       {state === 'over' && <GameOverScreen />}
     </>
   )

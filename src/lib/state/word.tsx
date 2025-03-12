@@ -6,7 +6,7 @@ import {
   useMemo,
   useState,
 } from 'react'
-import { useWordList } from './word-list'
+import { useDictionary } from './dictionary'
 
 const WordGetter = createContext<{
   word: string
@@ -63,14 +63,14 @@ export function useSetWord() {
 }
 
 export function useRandomizeWord() {
-  const wordList = useWordList()
+  const { list } = useDictionary()
   const setWord = useSetWord()
 
   return useCallback(() => {
-    if (!wordList.length) {
+    if (!list.length) {
       return
     }
-    const randomIndex = Math.floor(Math.random() * wordList.length)
-    setWord(wordList[randomIndex])
-  }, [wordList, setWord])
+    const randomIndex = Math.floor(Math.random() * list.length)
+    setWord(list[randomIndex])
+  }, [list, setWord])
 }
