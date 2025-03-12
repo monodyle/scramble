@@ -1,20 +1,21 @@
 import { useCallback } from 'react'
-import { useSetSettings, useSettings } from '../state/settings'
-import { useSetGameState } from '../state/stage'
+import { useSettings, useGameDispatch } from '../state/game'
 
 export default function useStrike() {
-  const { strikes } = useSettings()
-  const setSettings = useSetSettings()
-  const setGameState = useSetGameState()
+  const settings = useSettings()
+  const dispatch = useGameDispatch()
 
   return useCallback(() => {
-    const newStrikes = strikes - 1
+    const newStrikes = settings.strikes - 1
     if (newStrikes === 0) {
-      setGameState('over')
+      dispatch({ type: 'SET_STAGE', payload: 'over' })
     } else {
-      setSettings((prev) => ({ ...prev, strikes: newStrikes }))
+      dispatch({
+        type: 'UPDATE_SETTINGS',
+        payload: { ...settings, strikes: newStrikes },
+      })
     }
 
     return newStrikes
-  }, [setGameState, setSettings, strikes])
+  }, [dispatch, settings])
 }

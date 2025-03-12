@@ -1,4 +1,4 @@
-import { useScore } from '../state/score'
+import { useScore } from '../state/game'
 
 export default function Score() {
   const score = useScore()

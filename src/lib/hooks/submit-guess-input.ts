@@ -1,8 +1,7 @@
 import { useCallback } from 'react'
 import { useSound } from '../sound'
 import { useSetGuessState } from '../state/guess'
-import { useGameMode } from '../state/mode'
-import { useSetScore } from '../state/score'
+import { useGameDispatch, useGameMode } from '../state/game'
 import { useWord } from '../state/word'
 import { useDictionary } from '../state/dictionary'
 import useNextWord from './next-word'
@@ -38,8 +37,8 @@ export default function useSubmitGuessInput() {
   const { set } = useDictionary()
   const resetGuessInput = useResetGuessInput()
   const setGuessState = useSetGuessState()
+  const dispatch = useGameDispatch()
   const nextWord = useNextWord()
-  const setScore = useSetScore()
   const gameMode = useGameMode()
   const strike = useStrike()
   const resetTimer = useResetTimer()
@@ -49,13 +48,13 @@ export default function useSubmitGuessInput() {
     setGuessState('correct')
     play('correct')
     setTimeout(() => {
-      setScore((prev) => prev + 1)
+      dispatch({ type: 'INCREMENT_SCORE' })
       if (gameMode === 'rush') {
         resetTimer()
       }
       nextWord()
     }, 1000)
-  }, [setGuessState, setScore, gameMode, nextWord, resetTimer, play])
+  }, [setGuessState, gameMode, nextWord, resetTimer, play, dispatch])
 
   const incorrect = useCallback(() => {
     setGuessState('incorrect')

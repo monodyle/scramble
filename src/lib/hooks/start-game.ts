@@ -1,25 +1,45 @@
 import { useCallback } from 'react'
-import { useSetGameState } from '../state/stage'
-import { useSetDefaultSettings } from '../state/settings'
-import { type GameMode, useSetGameMode } from '../state/mode'
+import { useGameDispatch, type GameMode } from '../state/game'
 import { useRandomizeWord } from '../state/word'
-import { useSetScore } from '../state/score'
 
 export default function useStartGame() {
-  const setGameMode = useSetGameMode()
-  const setGameState = useSetGameState()
-  const setDefaultSettings = useSetDefaultSettings()
+  const dispatch = useGameDispatch()
   const randomizeWord = useRandomizeWord()
-  const setScore = useSetScore()
 
   return useCallback(
     (mode: GameMode) => {
-      setGameMode(mode)
-      setDefaultSettings(mode)
+      dispatch({ type: 'SET_MODE', payload: mode })
+
+      if (mode === 'chill') {
+        dispatch({
+          type: 'UPDATE_SETTINGS',
+          payload: {
+            strikes: Number.POSITIVE_INFINITY,
+            time: Number.POSITIVE_INFINITY,
+          },
+        })
+      } else if (mode === 'strike') {
+        dispatch({
+          type: 'UPDATE_SETTINGS',
+          payload: { strikes: 3, time: Number.POSITIVE_INFINITY },
+        })
+      } else if (mode === 'rush') {
+        dispatch({
+          type: 'UPDATE_SETTINGS',
+          payload: { strikes: 3, time: 10 },
+        })
+      } else if (mode === 'sprint') {
+        dispatch({
+          type: 'UPDATE_SETTINGS',
+          payload: { strikes: 1, time: 60 },
+        })
+      }
+
+      dispatch({ type: 'RESET_SCORE' })
+      dispatch({ type: 'SET_STAGE', payload: 'play' })
+
       randomizeWord()
-      setScore(0)
-      setGameState('play')
     },
-    [setGameMode, setDefaultSettings, randomizeWord, setScore, setGameState],
+    [dispatch, randomizeWord],
   )
 }

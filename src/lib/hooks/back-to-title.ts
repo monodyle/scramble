@@ -1,10 +1,10 @@
 import { useCallback } from 'react'
-import { useSetGameState } from '../state/stage'
+import { useGameDispatch } from '../state/game'
 
 export default function useBackToTitle() {
-  const setGameState = useSetGameState()
+  const dispatch = useGameDispatch()
 
   return useCallback(() => {
-    setGameState('title')
-  }, [setGameState])
+    dispatch({ type: 'SET_STAGE', payload: 'title' })
+  }, [dispatch])
 }

@@ -1,16 +1,16 @@
 import GameOverScreen from './lib/game-over'
 import PlayScreen from './lib/play'
-import { useGameState } from './lib/state/stage'
+import { useGameState } from './lib/state/game'
 import TitleScreen from './lib/title'
 
 export default function App() {
-  const state = useGameState()
+  const { stage } = useGameState()
 
   return (
     <>
-      {state === 'title' && <TitleScreen />}
-      {state === 'play' && <PlayScreen />}
-      {state === 'over' && <GameOverScreen />}
+      {stage === 'title' && <TitleScreen />}
+      {stage === 'play' && <PlayScreen />}
+      {stage === 'over' && <GameOverScreen />}
     </>
   )
 }

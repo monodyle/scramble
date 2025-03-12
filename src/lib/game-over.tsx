@@ -1,7 +1,6 @@
 import useBackToTitle from './hooks/back-to-title'
 import useStartGame from './hooks/start-game'
-import { useGameMode } from './state/mode'
-import { useScore } from './state/score'
+import { useGameMode, useScore } from './state/game'
 
 export default function GameOverScreen() {
   const backToTitle = useBackToTitle()

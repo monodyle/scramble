@@ -1,8 +1,7 @@
 import useSubmitGuessInput from '../hooks/submit-guess-input'
-import { useSettings } from '../state/settings'
 import { useEffect, useRef, useState } from 'react'
 import { useWord } from '../state/word'
-import { useGameMode } from '../state/mode'
+import { useGameMode, useSettings } from '../state/game'
 
 function Progression() {
   const progressRef = useRef<HTMLDivElement>(null)

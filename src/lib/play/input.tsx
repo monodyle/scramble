@@ -3,7 +3,7 @@ import useUpdateGuessInput from '../hooks/update-guess-input'
 import { useGuessState } from '../state/guess'
 import { useInput } from '../state/input'
 import { useWord } from '../state/word'
-import { useGameMode } from '../state/mode'
+import { useGameMode } from '../state/game'
 
 export default function Input() {
   const { word, scrambled } = useWord()

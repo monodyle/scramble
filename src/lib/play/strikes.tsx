@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { useSettings } from '../state/settings'
+import { useSettings } from '../state/game'
 
 export default function Strikes() {
   const { strikes } = useSettings()
