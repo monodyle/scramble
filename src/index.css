@@ -73,6 +73,6 @@
 
 @layer components {
   body {
-    @apply bg-base text-primary;
+    @apply bg-base text-primary font-sans;
   }
 }
