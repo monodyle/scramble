@@ -1,8 +1,10 @@
-import { ArrowLeft, CircleHelp, Volume2 } from 'lucide-react'
+import { ArrowLeft, CircleHelp, Volume2, VolumeX } from 'lucide-react'
 import useBackToTitle from '../hooks/back-to-title'
+import { useSound } from '../sound'
 
 export default function Actions() {
   const back = useBackToTitle()
+  const { isMuted, toggleMute } = useSound()
 
   return (
     <div className="flex gap-1">
@@ -15,9 +17,14 @@ export default function Actions() {
       </button>
       <button
         type="button"
+        onClick={toggleMute}
         className="p-1 bg-transparent border-none text-primary/60 hover:text-primary"
       >
-        <Volume2 className="size-5" />
+        {isMuted ? (
+          <VolumeX className="size-5" />
+        ) : (
+          <Volume2 className="size-5" />
+        )}
       </button>
       <button
         type="button"

@@ -8,6 +8,7 @@ import App from './app'
 import { queryClient } from './lib/query'
 import Providers from './lib/state/providers'
 import Layout from './lib/layout'
+import { SoundProvider } from './lib/sound'
 
 const rootEl = document.getElementById('root')
 if (rootEl) {
@@ -16,9 +17,11 @@ if (rootEl) {
     <React.StrictMode>
       <QueryClientProvider client={queryClient}>
         <Layout>
-          <Providers>
-            <App />
-          </Providers>
+          <SoundProvider>
+            <Providers>
+              <App />
+            </Providers>
+          </SoundProvider>
         </Layout>
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
