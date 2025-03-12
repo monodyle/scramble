@@ -53,7 +53,7 @@ export default function useSubmitGuessInput() {
         resetTimer()
       }
       nextWord()
-    }, 1000)
+    }, 500)
   }, [setGuessState, gameMode, nextWord, resetTimer, play, dispatch])
 
   const incorrect = useCallback(() => {
@@ -68,7 +68,7 @@ export default function useSubmitGuessInput() {
         }
         nextWord()
       }
-    }, 1000)
+    }, 500)
   }, [
     setGuessState,
     resetGuessInput,

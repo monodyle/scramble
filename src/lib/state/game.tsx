@@ -7,10 +7,8 @@ interface GameState {
   mode: GameMode
   stage: GameStage
   score: number
-  settings: {
-    strikes: number
-    time: number
-  }
+  strikes: number
+  time: number
 }
 
 type GameAction =
@@ -19,17 +17,16 @@ type GameAction =
   | { type: 'SET_SCORE'; payload: number }
   | { type: 'INCREMENT_SCORE' }
   | { type: 'RESET_SCORE' }
-  | { type: 'UPDATE_SETTINGS'; payload: { strikes: number; time: number } }
+  | { type: 'SET_STRIKES'; payload: number }
+  | { type: 'SET_TIME'; payload: number }
   | { type: 'RESET_GAME' }
 
 const initialState: GameState = {
   mode: null,
   stage: 'title',
   score: 0,
-  settings: {
-    strikes: 3,
-    time: 10,
-  },
+  strikes: 3,
+  time: 10,
 }
 
 function gameReducer(state: GameState, action: GameAction): GameState {
@@ -44,8 +41,10 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       return { ...state, score: state.score + 1 }
     case 'RESET_SCORE':
       return { ...state, score: 0 }
-    case 'UPDATE_SETTINGS':
-      return { ...state, settings: action.payload }
+    case 'SET_STRIKES':
+      return { ...state, strikes: action.payload }
+    case 'SET_TIME':
+      return { ...state, time: action.payload }
     case 'RESET_GAME':
       return initialState
     default:
@@ -84,7 +83,6 @@ export function useGameDispatch() {
   return context.dispatch
 }
 
-// Convenience hooks for specific state updates
 export function useGameMode() {
   const context = useContext(GameStateContext)
   if (!context) {
@@ -109,12 +107,20 @@ export function useScore() {
   return context.state.score
 }
 
-export function useSettings() {
+export function useStrikes() {
   const context = useContext(GameStateContext)
   if (!context) {
-    throw new Error('useSettings must be used within a GameStateProvider')
+    throw new Error('useStrikes must be used within a GameStateProvider')
   }
-  return context.state.settings
+  return context.state.strikes
+}
+
+export function useTime() {
+  const context = useContext(GameStateContext)
+  if (!context) {
+    throw new Error('useTime must be used within a GameStateProvider')
+  }
+  return context.state.time
 }
 
 export function useSetDefaultSettings() {
@@ -123,28 +129,17 @@ export function useSetDefaultSettings() {
   return useCallback(
     (mode: GameMode) => {
       if (mode === 'chill') {
-        dispatch({
-          type: 'UPDATE_SETTINGS',
-          payload: {
-            strikes: Number.POSITIVE_INFINITY,
-            time: Number.POSITIVE_INFINITY,
-          },
-        })
+        dispatch({ type: 'SET_STRIKES', payload: 3 })
+        dispatch({ type: 'SET_TIME', payload: Number.POSITIVE_INFINITY })
       } else if (mode === 'strike') {
-        dispatch({
-          type: 'UPDATE_SETTINGS',
-          payload: { strikes: 3, time: Number.POSITIVE_INFINITY },
-        })
+        dispatch({ type: 'SET_STRIKES', payload: 3 })
+        dispatch({ type: 'SET_TIME', payload: Number.POSITIVE_INFINITY })
       } else if (mode === 'rush') {
-        dispatch({
-          type: 'UPDATE_SETTINGS',
-          payload: { strikes: 3, time: 10 },
-        })
+        dispatch({ type: 'SET_STRIKES', payload: 3 })
+        dispatch({ type: 'SET_TIME', payload: 10 })
       } else if (mode === 'sprint') {
-        dispatch({
-          type: 'UPDATE_SETTINGS',
-          payload: { strikes: 1, time: 60 },
-        })
+        dispatch({ type: 'SET_STRIKES', payload: 1 })
+        dispatch({ type: 'SET_TIME', payload: 60 })
       }
     },
     [dispatch],

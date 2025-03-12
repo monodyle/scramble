@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
-import { useSettings } from '../state/game'
+import { useStrikes } from '../state/game'
 
 export default function Strikes() {
-  const { strikes } = useSettings()
+  const strikes = useStrikes()
   const [isStriking, setIsStriking] = useState(false)
   const prevStrikes = useRef(strikes)
 
