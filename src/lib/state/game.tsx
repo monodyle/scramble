@@ -129,7 +129,7 @@ export function useSetDefaultSettings() {
   return useCallback(
     (mode: GameMode) => {
       if (mode === 'chill') {
-        dispatch({ type: 'SET_STRIKES', payload: 3 })
+        dispatch({ type: 'SET_STRIKES', payload: Number.POSITIVE_INFINITY })
         dispatch({ type: 'SET_TIME', payload: Number.POSITIVE_INFINITY })
       } else if (mode === 'strike') {
         dispatch({ type: 'SET_STRIKES', payload: 3 })
