@@ -1,4 +1,4 @@
-import { ArrowLeft, CircleHelp, Volume2, VolumeX } from 'lucide-react'
+import { ArrowLeft, Volume2, VolumeX } from 'lucide-react'
 import useBackToTitle from '../hooks/back-to-title'
 import { useSound } from '../sound'
 
@@ -25,12 +25,6 @@ export default function Actions() {
         ) : (
           <Volume2 className="size-5" />
         )}
-      </button>
-      <button
-        type="button"
-        className="p-1 bg-transparent border-none text-primary/60 hover:text-primary"
-      >
-        <CircleHelp className="size-5" />
       </button>
     </div>
   )
