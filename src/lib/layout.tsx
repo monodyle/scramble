@@ -2,7 +2,7 @@ export default function Layout({ children }: React.PropsWithChildren) {
   return (
     <main className="flex flex-col min-h-screen bg-base">
       <div className="flex flex-col flex-1 w-full max-w-2xl px-5 py-4 mx-auto">
-        <div className="relative flex flex-col items-center justify-center flex-1 w-full mx-auto space-y-4 overflow-hidden border border-border rounded-xl">
+        <div className="relative flex flex-col items-center justify-center flex-1 w-full mx-auto space-y-4 overflow-hidden border border-border rounded-xl bg-elevated">
           {children}
         </div>
       </div>
