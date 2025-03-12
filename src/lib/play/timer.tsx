@@ -1,36 +1,28 @@
 import useSubmitGuessInput from '../hooks/submit-guess-input'
-import { useGameMode } from '../state/mode'
-import { useSetSettings, useSettings } from '../state/settings'
-import { useEffect, useRef } from 'react'
+import { useSettings } from '../state/settings'
+import { useEffect, useRef, useState } from 'react'
+import { useWord } from '../state/word'
 
-export default function Timer() {
+function Progression() {
   const progressRef = useRef<HTMLDivElement>(null)
-  const { time } = useSettings()
-  const setSettings = useSetSettings()
-  const gameMode = useGameMode()
   const timerRef = useRef<number | null>(null)
-
-  const originalTime =
-    gameMode === 'rush'
-      ? 10
-      : gameMode === 'sprint'
-        ? 60
-        : Number.POSITIVE_INFINITY
+  const { time } = useSettings()
+  const [timeLeft, setTimeLeft] = useState(time)
 
   const submitGuessInput = useSubmitGuessInput()
 
   useEffect(() => {
-    if (time === Number.POSITIVE_INFINITY) {
+    if (timeLeft === Number.POSITIVE_INFINITY) {
       return
     }
 
-    if (time > 0) {
+    if (timeLeft > 0) {
       timerRef.current = setInterval(() => {
-        const newTime = time - 1
-        setSettings((prev) => ({ ...prev, time: newTime }))
+        const newTime = timeLeft - 1
+        setTimeLeft(newTime)
         progressRef.current?.style.setProperty(
           '--progress',
-          `${(newTime / originalTime) * 100}%`,
+          `${(newTime / time) * 100}%`,
         )
         if (newTime === 0) {
           submitGuessInput('')
@@ -48,7 +40,7 @@ export default function Timer() {
         timerRef.current = null
       }
     }
-  }, [time, submitGuessInput, setSettings, originalTime])
+  }, [time, submitGuessInput, timeLeft])
 
   if (time === Number.POSITIVE_INFINITY) {
     return null
@@ -62,4 +54,10 @@ export default function Timer() {
       />
     </div>
   )
+}
+
+export default function Timer() {
+  const { word } = useWord()
+
+  return <Progression key={word} />
 }
