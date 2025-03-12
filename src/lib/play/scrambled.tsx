@@ -5,7 +5,7 @@ import { useWord } from '../state/word'
 
 export default function Scrambled() {
   const { scrambled } = useWord()
-  const { update } = useUpdateGuessInput()
+  const { update, backspace } = useUpdateGuessInput()
   const { usedIndices } = useInput()
   const guessState = useGuessState()
 
@@ -34,6 +34,14 @@ export default function Scrambled() {
           {char}
         </button>
       ))}
+      <button
+        type="button"
+        onClick={() => backspace()}
+        aria-label="Backspace"
+        className="text-xl size-12 rounded-lg font-semibold select-none flex items-center justify-center cursor-pointer transition-all disabled:cursor-default bg-primary/20 text-primary hover:bg-primary/30 focus:ring-2 focus:ring-primary focus:outline-none"
+      >
+        ←
+      </button>
     </div>
   )
 }
