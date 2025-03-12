@@ -8,7 +8,7 @@ import {
 
 const SoundContext = createContext<{
   isMuted: boolean
-  play: (sound: 'correct' | 'incorrect') => void
+  play: (sound: 'correct' | 'incorrect' | 'complete') => void
   toggleMute: () => void
 }>({
   play: () => {},
@@ -16,31 +16,28 @@ const SoundContext = createContext<{
   isMuted: false,
 })
 
+const correctSound = new Audio('/sounds/duolingo-correct.mp3')
+const incorrectSound = new Audio('/sounds/duolingo-incorrect.mp3')
+const completeSound = new Audio('/sounds/duolingo-complete.mp3')
+
 export function SoundProvider({ children }: React.PropsWithChildren) {
   const [isMuted, toggleMute] = useReducer((state) => !state, false)
 
-  const correctSound = useMemo(
-    () => new Audio('/sounds/duolingo-correct.mp3'),
-    [],
-  )
-  const incorrectSound = useMemo(
-    () => new Audio('/sounds/duolingo-incorrect.mp3'),
-    [],
-  )
-
   const play = useCallback(
-    (sound: 'correct' | 'incorrect') => {
+    (sound: 'correct' | 'incorrect' | 'complete') => {
       if (isMuted) {
         return
       }
 
       if (sound === 'correct') {
         correctSound.play()
-      } else {
+      } else if (sound === 'incorrect') {
         incorrectSound.play()
+      } else if (sound === 'complete') {
+        completeSound.play()
       }
     },
-    [correctSound, incorrectSound, isMuted],
+    [isMuted],
   )
 
   const value = useMemo(() => ({ play, isMuted, toggleMute }), [play, isMuted])

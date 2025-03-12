@@ -3,19 +3,22 @@ import useBackToTitle from './hooks/back-to-title'
 import useStartGame from './hooks/start-game'
 import { useGameMode, useScore } from './state/game'
 import JSConfetti from 'js-confetti'
+import { useSound } from './sound'
 
 export default function GameOverScreen() {
   const backToTitle = useBackToTitle()
   const gameMode = useGameMode()
   const startGame = useStartGame()
   const score = useScore()
+  const { play } = useSound()
 
   useEffect(() => {
+    play('complete')
     const confetti = new JSConfetti()
     confetti.addConfetti({
       emojis: ['🌈', '⚡️', '💥', '✨', '💫', '🌸'],
     })
-  }, [])
+  }, [play])
 
   return (
     <div className="text-center" id="game-over-confetti">
