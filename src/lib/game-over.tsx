@@ -1,7 +1,11 @@
 import useBackToTitle from './hooks/back-to-title'
+import useStartGame from './hooks/start-game'
+import { useGameMode } from './state/mode'
 
 export default function GameOverScreen() {
   const backToTitle = useBackToTitle()
+  const gameMode = useGameMode()
+  const startGame = useStartGame()
 
   return (
     <div className="text-center">
@@ -15,6 +19,7 @@ export default function GameOverScreen() {
         <button
           type="button"
           className="px-4 py-1.5 font-serif font-semibold transition-colors transform rounded-lg text-elevated bg-primary hover:bg-primary/80 w-36"
+          onClick={() => startGame(gameMode)}
         >
           Play Again
         </button>
