@@ -3,11 +3,13 @@ import useUpdateGuessInput from '../hooks/update-guess-input'
 import { useGuessState } from '../state/guess'
 import { useInput } from '../state/input'
 import { useWord } from '../state/word'
+import { useGameMode } from '../state/mode'
 
 export default function Input() {
   const { word, scrambled } = useWord()
   const { input, usedIndices } = useInput()
   const guessState = useGuessState()
+  const gameMode = useGameMode()
   const { update, backspace } = useUpdateGuessInput()
 
   useEffect(() => {
@@ -43,21 +45,25 @@ export default function Input() {
     guessState,
   ])
 
+  const showAnswer = guessState === 'incorrect' && gameMode !== 'chill'
+
   return (
     <div className="flex items-center justify-center gap-1">
       {Array.from({ length: word.length }).map((_, index) => (
         <div
           key={index}
           className={[
-            'text-xl size-12 rounded-lg font-semibold select-none flex items-center justify-center border-2 text-violet',
+            'text-xl size-12 rounded-lg font-semibold select-none flex items-center justify-center border-2',
             index === input.length
-              ? 'border-violet bg-violet/5'
+              ? 'border-violet bg-violet/5 text-violet'
               : index < input.length
-                ? 'border-violet/20 bg-violet/5'
+                ? 'border-violet/20 bg-violet/5 text-violet'
                 : 'border-border bg-elevated',
+            guessState === 'incorrect' &&
+              'text-red border-red/20 bg-red/5 animate-[shake_200ms_ease-in-out_1_alternate]',
           ].join(' ')}
         >
-          {input[index]}
+          {showAnswer ? word[index] : input[index]}
         </div>
       ))}
     </div>
