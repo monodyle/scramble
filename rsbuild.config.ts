@@ -128,6 +128,13 @@ export default defineConfig({
           content: 'https://scramble.takea.cafe/preview.jpg',
         },
       },
+      {
+        tag: 'meta',
+        attrs: {
+          name: 'viewport',
+          content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no',
+        },
+      },
     ],
   },
 })

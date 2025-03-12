@@ -1,6 +1,7 @@
 import Actions from './play/actions'
 import Input from './play/input'
 import Message from './play/message'
+import Options from './play/options'
 import Score from './play/score'
 import Scrambled from './play/scrambled'
 import Strikes from './play/strikes'
@@ -21,6 +22,7 @@ export default function PlayScreen() {
         <Input />
         <Scrambled />
       </div>
+      <Options />
     </div>
   )
 }
