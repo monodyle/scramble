@@ -10,7 +10,7 @@ export default function Input() {
   const { input, usedIndices } = useInput()
   const guessState = useGuessState()
   const gameMode = useGameMode()
-  const { update, backspace } = useUpdateGuessInput()
+  const { update, backspace, popout } = useUpdateGuessInput()
 
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
@@ -50,21 +50,24 @@ export default function Input() {
   return (
     <div className="flex items-center justify-center gap-1">
       {Array.from({ length: word.length }).map((_, index) => (
-        <div
+        <button
           key={index}
+          onClick={() => popout(index)}
+          type="button"
+          disabled={guessState !== 'idle' || index >= input.length}
           className={[
             'text-xl size-12 rounded-lg font-semibold select-none flex items-center justify-center border-2',
             index === input.length
               ? 'border-violet bg-violet/5 text-violet'
               : index < input.length
-                ? 'border-violet/20 bg-violet/5 text-violet'
+                ? 'border-violet/20 bg-violet/5 text-violet cursor-pointer hover:bg-violet/10'
                 : 'border-border bg-elevated',
             guessState === 'incorrect' &&
               'text-red border-red/20 bg-red/5 animate-[shake_200ms_ease-in-out_1_alternate]',
           ].join(' ')}
         >
           {showAnswer ? word[index] : input[index]}
-        </div>
+        </button>
       ))}
     </div>
   )

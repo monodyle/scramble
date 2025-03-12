@@ -5,7 +5,7 @@ import { useWord } from '../state/word'
 import useSubmitGuessInput from './submit-guess-input'
 
 export default function useUpdateGuessInput() {
-  const { word } = useWord()
+  const { word, scrambled } = useWord()
   const { input, usedIndices } = useInput()
   const { setInput, setUsedIndices } = useInputActions()
   const guessState = useGuessState()
@@ -37,6 +37,30 @@ export default function useUpdateGuessInput() {
     ],
   )
 
+  const popout = useCallback(
+    (index: number) => {
+      if (guessState === 'idle' && input.length > index) {
+        const charToRemove = input[index]
+
+        const scrambledIndex = scrambled
+          .split('')
+          .findIndex(
+            (char, idx) => char === charToRemove && usedIndices.includes(idx),
+          )
+
+        if (scrambledIndex !== -1) {
+          const newInput = input.slice(0, index) + input.slice(index + 1)
+          const newUsedIndices = usedIndices.filter(
+            (idx) => idx !== scrambledIndex,
+          )
+          setInput(newInput)
+          setUsedIndices(newUsedIndices)
+        }
+      }
+    },
+    [guessState, input, usedIndices, setInput, setUsedIndices, scrambled],
+  )
+
   const clear = useCallback(() => {
     if (guessState === 'idle') {
       setInput('')
@@ -53,6 +77,7 @@ export default function useUpdateGuessInput() {
 
   return {
     update,
+    popout,
     backspace,
     clear,
   }
