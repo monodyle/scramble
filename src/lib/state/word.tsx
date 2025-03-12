@@ -7,7 +7,7 @@ import {
 } from 'react'
 import { useDictionary } from './dictionary'
 
-interface WordState {
+type WordState = {
   word: string
   scrambled: string
 }

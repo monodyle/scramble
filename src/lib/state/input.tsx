@@ -1,6 +1,6 @@
 import { createContext, useContext, useReducer, useCallback } from 'react'
 
-interface InputState {
+type InputState = {
   input: string
   usedIndices: number[]
 }

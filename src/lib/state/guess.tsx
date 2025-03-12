@@ -2,7 +2,7 @@ import { createContext, useContext, useReducer, useCallback } from 'react'
 
 export type GuessState = 'idle' | 'correct' | 'incorrect'
 
-interface GuessContextState {
+type GuessContextState = {
   state: GuessState
 }
 

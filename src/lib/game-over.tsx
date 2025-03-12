@@ -1,6 +1,8 @@
+import { useEffect } from 'react'
 import useBackToTitle from './hooks/back-to-title'
 import useStartGame from './hooks/start-game'
 import { useGameMode, useScore } from './state/game'
+import JSConfetti from 'js-confetti'
 
 export default function GameOverScreen() {
   const backToTitle = useBackToTitle()
@@ -8,8 +10,15 @@ export default function GameOverScreen() {
   const startGame = useStartGame()
   const score = useScore()
 
+  useEffect(() => {
+    const confetti = new JSConfetti()
+    confetti.addConfetti({
+      emojis: ['🌈', '⚡️', '💥', '✨', '💫', '🌸'],
+    })
+  }, [])
+
   return (
-    <div className="text-center">
+    <div className="text-center" id="game-over-confetti">
       <h1 className="font-serif text-3xl font-semibold text-center text-primary">
         Game Over!
       </h1>

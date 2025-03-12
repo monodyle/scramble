@@ -3,7 +3,7 @@ import { createContext, useContext, useReducer, useCallback } from 'react'
 export type GameMode = 'chill' | 'strike' | 'rush' | 'sprint' | null
 export type GameStage = 'title' | 'play' | 'pause' | 'over'
 
-interface GameState {
+type GameState = {
   mode: GameMode
   stage: GameStage
   score: number
