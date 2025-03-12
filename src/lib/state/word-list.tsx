@@ -1,7 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
-import { createContext, useContext } from 'react'
+import { createContext, useContext, useMemo } from 'react'
 
 const WordListContext = createContext<Array<string>>([])
+const WordSetContext = createContext<Set<string>>(new Set())
 const CACHE_KEY = 'words-data'
 const ASSET_PATH = '/words.txt'
 
@@ -32,32 +33,46 @@ export function WordListProvider({ children }: React.PropsWithChildren) {
     },
   })
 
+  // Create memoized word set at the provider level
+  const wordSet = useMemo(
+    () => new Set(query.data?.map((w) => w.toLowerCase()) ?? []),
+    [query.data],
+  )
+
   return (
     <WordListContext.Provider value={query.data ?? []}>
-      {query.isLoading ? (
-        <div className="flex flex-col items-center justify-center h-full m-auto">
-          <div className="inline-flex items-center opacity-60">
-            <span className="font-serif font-medium text-primary">Loading</span>
-            <span className="inline-flex">
-              <span className="text-primary animate-[loading-dots_1.4s_infinite_0.2s]">
-                .
+      <WordSetContext.Provider value={wordSet}>
+        {query.isLoading ? (
+          <div className="flex flex-col items-center justify-center h-full m-auto">
+            <div className="inline-flex items-center opacity-60">
+              <span className="font-serif font-medium text-primary">
+                Loading
               </span>
-              <span className="text-primary animate-[loading-dots_1.4s_infinite_0.4s]">
-                .
+              <span className="inline-flex">
+                <span className="text-primary animate-[loading-dots_1.4s_infinite_0.2s]">
+                  .
+                </span>
+                <span className="text-primary animate-[loading-dots_1.4s_infinite_0.4s]">
+                  .
+                </span>
+                <span className="text-primary animate-[loading-dots_1.4s_infinite_0.6s]">
+                  .
+                </span>
               </span>
-              <span className="text-primary animate-[loading-dots_1.4s_infinite_0.6s]">
-                .
-              </span>
-            </span>
+            </div>
           </div>
-        </div>
-      ) : (
-        children
-      )}
+        ) : (
+          children
+        )}
+      </WordSetContext.Provider>
     </WordListContext.Provider>
   )
 }
 
 export function useWordList() {
   return useContext(WordListContext)
+}
+
+export function useWordSet() {
+  return useContext(WordSetContext)
 }
