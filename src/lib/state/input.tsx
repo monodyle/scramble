@@ -1,37 +1,102 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useReducer, useCallback } from 'react'
 
-const InputContext = createContext<{
+interface InputState {
   input: string
   usedIndices: number[]
-}>({
+}
+
+type InputAction =
+  | { type: 'SET_INPUT'; payload: string }
+  | { type: 'SET_USED_INDICES'; payload: number[] }
+  | { type: 'ADD_USED_INDEX'; payload: number }
+  | { type: 'RESET_INPUT' }
+
+const initialState: InputState = {
   input: '',
   usedIndices: [],
-})
-const InputContextSetter = createContext<{
-  setInput: React.Dispatch<React.SetStateAction<string>>
-  setUsedIndices: React.Dispatch<React.SetStateAction<Array<number>>>
-}>({
-  setInput: () => {},
-  setUsedIndices: () => {},
-})
+}
+
+function inputReducer(state: InputState, action: InputAction): InputState {
+  switch (action.type) {
+    case 'SET_INPUT':
+      return { ...state, input: action.payload }
+    case 'SET_USED_INDICES':
+      return { ...state, usedIndices: action.payload }
+    case 'ADD_USED_INDEX':
+      return { ...state, usedIndices: [...state.usedIndices, action.payload] }
+    case 'RESET_INPUT':
+      return initialState
+    default:
+      return state
+  }
+}
+
+const InputContext = createContext<{
+  state: InputState
+  dispatch: React.Dispatch<InputAction>
+} | null>(null)
 
 export function InputProvider({ children }: React.PropsWithChildren) {
-  const [input, setInput] = useState('')
-  const [usedIndices, setUsedIndices] = useState<number[]>([])
+  const [state, dispatch] = useReducer(inputReducer, initialState)
 
   return (
-    <InputContext.Provider value={{ input, usedIndices }}>
-      <InputContextSetter.Provider value={{ setInput, setUsedIndices }}>
-        {children}
-      </InputContextSetter.Provider>
+    <InputContext.Provider value={{ state, dispatch }}>
+      {children}
     </InputContext.Provider>
   )
 }
 
+export function useInputState() {
+  const context = useContext(InputContext)
+  if (!context) {
+    throw new Error('useInputState must be used within an InputProvider')
+  }
+  return context.state
+}
+
+export function useInputDispatch() {
+  const context = useContext(InputContext)
+  if (!context) {
+    throw new Error('useInputDispatch must be used within an InputProvider')
+  }
+  return context.dispatch
+}
+
 export function useInput() {
-  return useContext(InputContext)
+  const context = useContext(InputContext)
+  if (!context) {
+    throw new Error('useInput must be used within an InputProvider')
+  }
+  return context.state
 }
 
 export function useInputActions() {
-  return useContext(InputContextSetter)
+  const dispatch = useInputDispatch()
+
+  return {
+    setInput: useCallback(
+      (input: string) => {
+        dispatch({ type: 'SET_INPUT', payload: input })
+      },
+      [dispatch],
+    ),
+
+    setUsedIndices: useCallback(
+      (indices: number[]) => {
+        dispatch({ type: 'SET_USED_INDICES', payload: indices })
+      },
+      [dispatch],
+    ),
+
+    addUsedIndex: useCallback(
+      (index: number) => {
+        dispatch({ type: 'ADD_USED_INDEX', payload: index })
+      },
+      [dispatch],
+    ),
+
+    resetInput: useCallback(() => {
+      dispatch({ type: 'RESET_INPUT' })
+    }, [dispatch]),
+  }
 }

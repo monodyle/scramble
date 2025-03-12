@@ -1,17 +1,28 @@
 import { useCallback } from 'react'
 import { useGameDispatch, type GameMode } from '../state/game'
 import { useRandomizeWord } from '../state/word'
+import { useInputDispatch } from '../state/input'
+import { useGuessDispatch } from '../state/guess'
 
 export default function useStartGame() {
-  const dispatch = useGameDispatch()
+  const gameDispatch = useGameDispatch()
+  const inputDispatch = useInputDispatch()
+  const guessDispatch = useGuessDispatch()
   const randomizeWord = useRandomizeWord()
 
   return useCallback(
     (mode: GameMode) => {
-      dispatch({ type: 'SET_MODE', payload: mode })
+      // Reset all states
+      gameDispatch({ type: 'RESET_GAME' })
+      inputDispatch({ type: 'RESET_INPUT' })
+      guessDispatch({ type: 'RESET_GUESS' })
 
+      // Set up new game
+      gameDispatch({ type: 'SET_MODE', payload: mode })
+
+      // Configure settings based on mode
       if (mode === 'chill') {
-        dispatch({
+        gameDispatch({
           type: 'UPDATE_SETTINGS',
           payload: {
             strikes: Number.POSITIVE_INFINITY,
@@ -19,27 +30,26 @@ export default function useStartGame() {
           },
         })
       } else if (mode === 'strike') {
-        dispatch({
+        gameDispatch({
           type: 'UPDATE_SETTINGS',
           payload: { strikes: 3, time: Number.POSITIVE_INFINITY },
         })
       } else if (mode === 'rush') {
-        dispatch({
+        gameDispatch({
           type: 'UPDATE_SETTINGS',
           payload: { strikes: 3, time: 10 },
         })
       } else if (mode === 'sprint') {
-        dispatch({
+        gameDispatch({
           type: 'UPDATE_SETTINGS',
           payload: { strikes: 1, time: 60 },
         })
       }
 
-      dispatch({ type: 'RESET_SCORE' })
-      dispatch({ type: 'SET_STAGE', payload: 'play' })
-
+      // Start the game
+      gameDispatch({ type: 'SET_STAGE', payload: 'play' })
       randomizeWord()
     },
-    [dispatch, randomizeWord],
+    [gameDispatch, inputDispatch, guessDispatch, randomizeWord],
   )
 }

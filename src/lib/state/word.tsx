@@ -3,16 +3,24 @@ import {
   useCallback,
   useContext,
   useEffect,
-  useMemo,
-  useState,
+  useReducer,
 } from 'react'
 import { useDictionary } from './dictionary'
 
-const WordGetter = createContext<{
+interface WordState {
   word: string
   scrambled: string
-} | null>(null)
-const WordSetter = createContext<((word: string) => void) | null>(null)
+}
+
+type WordAction =
+  | { type: 'SET_WORD'; payload: string }
+  | { type: 'SCRAMBLE_WORD' }
+  | { type: 'RESET_WORD' }
+
+const initialState: WordState = {
+  word: 'hello',
+  scrambled: 'lehlo',
+}
 
 function scramble(word: string): string {
   if (word.length === 0) {
@@ -28,49 +36,88 @@ function scramble(word: string): string {
   return scrambled === word ? scramble(word) : scrambled
 }
 
+function wordReducer(state: WordState, action: WordAction): WordState {
+  switch (action.type) {
+    case 'SET_WORD':
+      return {
+        word: action.payload,
+        scrambled: scramble(action.payload),
+      }
+    case 'SCRAMBLE_WORD':
+      return {
+        ...state,
+        scrambled: scramble(state.word),
+      }
+    case 'RESET_WORD':
+      return initialState
+    default:
+      return state
+  }
+}
+
+const WordContext = createContext<{
+  state: WordState
+  dispatch: React.Dispatch<WordAction>
+} | null>(null)
+
 export function WordProvider({ children }: React.PropsWithChildren) {
-  const [word, setWord] = useState('hello')
-  const scrambled = useMemo(() => scramble(word), [word])
+  const [state, dispatch] = useReducer(wordReducer, initialState)
 
   // DEBUG
   useEffect(() => {
-    console.debug('original word', word)
-  }, [word])
+    console.debug('original word', state.word)
+  }, [state.word])
 
   return (
-    <WordGetter.Provider value={{ word, scrambled }}>
-      <WordSetter.Provider value={setWord}>{children}</WordSetter.Provider>
-    </WordGetter.Provider>
+    <WordContext.Provider value={{ state, dispatch }}>
+      {children}
+    </WordContext.Provider>
   )
 }
 
+export function useWordState() {
+  const context = useContext(WordContext)
+  if (!context) {
+    throw new Error('useWordState must be used within a WordProvider')
+  }
+  return context.state
+}
+
+export function useWordDispatch() {
+  const context = useContext(WordContext)
+  if (!context) {
+    throw new Error('useWordDispatch must be used within a WordProvider')
+  }
+  return context.dispatch
+}
+
 export function useWord() {
-  const word = useContext(WordGetter)
-  if (!word) {
+  const context = useContext(WordContext)
+  if (!context) {
     throw new Error('useWord must be used within a WordProvider')
   }
-
-  return word
+  return context.state
 }
 
 export function useSetWord() {
-  const setWord = useContext(WordSetter)
-  if (!setWord) {
-    throw new Error('useSetWord must be used within a WordProvider')
-  }
-
-  return setWord
+  const dispatch = useWordDispatch()
+  return useCallback(
+    (word: string) => {
+      dispatch({ type: 'SET_WORD', payload: word })
+    },
+    [dispatch],
+  )
 }
 
 export function useRandomizeWord() {
   const { list } = useDictionary()
-  const setWord = useSetWord()
+  const dispatch = useWordDispatch()
 
   return useCallback(() => {
     if (!list.length) {
       return
     }
     const randomIndex = Math.floor(Math.random() * list.length)
-    setWord(list[randomIndex])
-  }, [list, setWord])
+    dispatch({ type: 'SET_WORD', payload: list[randomIndex] })
+  }, [list, dispatch])
 }
