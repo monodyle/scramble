@@ -37,6 +37,13 @@ export default function useUpdateGuessInput() {
     ],
   )
 
+  const clear = useCallback(() => {
+    if (guessState === 'idle') {
+      setInput('')
+      setUsedIndices([])
+    }
+  }, [guessState, setInput, setUsedIndices])
+
   const backspace = useCallback(() => {
     if (guessState === 'idle' && input.length > 0) {
       setInput(input.slice(0, -1))
@@ -47,5 +54,6 @@ export default function useUpdateGuessInput() {
   return {
     update,
     backspace,
+    clear,
   }
 }

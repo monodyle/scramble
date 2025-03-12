@@ -22,6 +22,7 @@ export default function PlayScreen() {
         <Input />
         <Scrambled />
       </div>
+      <div className='h-9' />
       <Options />
     </div>
   )
