@@ -8,12 +8,20 @@ export default function Layout({ children }: React.PropsWithChildren) {
       </div>
       <footer className="px-5 py-4">
         <p className="text-sm text-center text-primary/60">
-          made with ❤️ by{' '}
+          <a
+            href="https://github.com/monodyle/scramble"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:underline"
+          >
+            scramble game
+          </a>{' '}
+          by{' '}
           <a
             href="https://github.com/monodyle"
             target="_blank"
             rel="noopener noreferrer"
-            className="underline"
+            className="hover:underline"
           >
             monodyle
           </a>
