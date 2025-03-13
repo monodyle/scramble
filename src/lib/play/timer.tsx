@@ -1,18 +1,19 @@
 import useSubmitGuessInput from '../hooks/submit-guess-input'
 import { useEffect, useRef, useState } from 'react'
 import { useWord } from '../state/word'
-import { useGameMode, useTime } from '../state/game'
+import { useGameMode, useGameStage, useTime } from '../state/game'
 
 function Progression() {
-  const progressRef = useRef<HTMLDivElement>(null)
-  const timerRef = useRef<number | null>(null)
   const time = useTime()
   const [timeLeft, setTimeLeft] = useState(time)
+  const timerRef = useRef<number | null>(null)
+  const progressRef = useRef<HTMLDivElement>(null)
 
+  const stage = useGameStage()
   const submitGuessInput = useSubmitGuessInput()
 
   useEffect(() => {
-    if (timeLeft === Number.POSITIVE_INFINITY) {
+    if (timeLeft === Number.POSITIVE_INFINITY || stage !== 'over') {
       return
     }
 
@@ -40,7 +41,7 @@ function Progression() {
         timerRef.current = null
       }
     }
-  }, [time, submitGuessInput, timeLeft])
+  }, [time, submitGuessInput, timeLeft, stage])
 
   if (time === Number.POSITIVE_INFINITY) {
     return null

@@ -68,7 +68,7 @@ export default function useSubmitGuessInput() {
         nextWord()
       }
       resetGuessInput()
-    }, 1000)
+    }, 2000)
   }, [
     setGuessState,
     resetGuessInput,
