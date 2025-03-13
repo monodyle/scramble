@@ -1,6 +1,7 @@
 import { createContext, useContext, useReducer, useCallback } from 'react'
 import { useSetGuessState } from './guess'
 
+// TODO: use array from the scrambled word might be better
 type InputState = {
   input: string
   usedIndices: number[]
@@ -9,7 +10,6 @@ type InputState = {
 type InputAction =
   | { type: 'SET_INPUT'; payload: string }
   | { type: 'SET_USED_INDICES'; payload: number[] }
-  | { type: 'ADD_USED_INDEX'; payload: number }
   | { type: 'RESET_INPUT' }
 
 const initialState: InputState = {
@@ -23,8 +23,6 @@ function inputReducer(state: InputState, action: InputAction): InputState {
       return { ...state, input: action.payload }
     case 'SET_USED_INDICES':
       return { ...state, usedIndices: action.payload }
-    case 'ADD_USED_INDEX':
-      return { ...state, usedIndices: [...state.usedIndices, action.payload] }
     case 'RESET_INPUT':
       return initialState
     default:
@@ -35,7 +33,14 @@ function inputReducer(state: InputState, action: InputAction): InputState {
 const InputContext = createContext<{
   state: InputState
   dispatch: React.Dispatch<InputAction>
-} | null>(null)
+}>({
+  state: initialState,
+  dispatch: () => {
+    throw new Error(
+      'InputContext dispatch must be used within an InputProvider',
+    )
+  },
+})
 
 export function InputProvider({ children }: React.PropsWithChildren) {
   const [state, dispatch] = useReducer(inputReducer, initialState)
@@ -47,22 +52,6 @@ export function InputProvider({ children }: React.PropsWithChildren) {
   )
 }
 
-export function useInputState() {
-  const context = useContext(InputContext)
-  if (!context) {
-    throw new Error('useInputState must be used within an InputProvider')
-  }
-  return context.state
-}
-
-export function useInputDispatch() {
-  const context = useContext(InputContext)
-  if (!context) {
-    throw new Error('useInputDispatch must be used within an InputProvider')
-  }
-  return context.dispatch
-}
-
 export function useInput() {
   const context = useContext(InputContext)
   if (!context) {
@@ -71,44 +60,34 @@ export function useInput() {
   return context.state
 }
 
-export function useInputActions() {
-  const dispatch = useInputDispatch()
+export function useSetInput() {
+  const { dispatch } = useContext(InputContext)
 
-  return {
-    setInput: useCallback(
-      (input: string) => {
-        dispatch({ type: 'SET_INPUT', payload: input })
-      },
-      [dispatch],
-    ),
+  return useCallback(
+    (input: string) => {
+      dispatch({ type: 'SET_INPUT', payload: input })
+    },
+    [dispatch],
+  )
+}
 
-    setUsedIndices: useCallback(
-      (indices: number[]) => {
-        dispatch({ type: 'SET_USED_INDICES', payload: indices })
-      },
-      [dispatch],
-    ),
+export function useSetUsedIndices() {
+  const { dispatch } = useContext(InputContext)
 
-    addUsedIndex: useCallback(
-      (index: number) => {
-        dispatch({ type: 'ADD_USED_INDEX', payload: index })
-      },
-      [dispatch],
-    ),
-
-    resetInput: useCallback(() => {
-      dispatch({ type: 'RESET_INPUT' })
-    }, [dispatch]),
-  }
+  return useCallback(
+    (indices: number[]) => {
+      dispatch({ type: 'SET_USED_INDICES', payload: indices })
+    },
+    [dispatch],
+  )
 }
 
 export function useResetGuessInput() {
   const setGuessState = useSetGuessState()
-  const { setInput, setUsedIndices } = useInputActions()
+  const { dispatch } = useContext(InputContext)
 
   return useCallback(() => {
-    setUsedIndices([])
-    setInput('')
+    dispatch({ type: 'RESET_INPUT' })
     setGuessState('idle')
-  }, [setGuessState, setInput, setUsedIndices])
+  }, [dispatch, setGuessState])
 }

@@ -1,13 +1,14 @@
 import { useCallback } from 'react'
 import { useGuessState } from '../state/guess'
-import { useInput, useInputActions } from '../state/input'
+import { useInput, useSetInput, useSetUsedIndices } from '../state/input'
 import { useWord } from '../state/word'
 import useSubmitGuessInput from './submit-guess-input'
 
 export default function useUpdateGuessInput() {
   const { word, scrambled } = useWord()
   const { input, usedIndices } = useInput()
-  const { setInput, setUsedIndices } = useInputActions()
+  const setInput = useSetInput()
+  const setUsedIndices = useSetUsedIndices()
   const guessState = useGuessState()
   const submitGuessInput = useSubmitGuessInput()
 
