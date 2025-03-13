@@ -9,7 +9,7 @@ import Timer from './play/timer'
 
 export default function PlayScreen() {
   return (
-    <div className="flex-1 w-full h-full space-y-4">
+    <div className="flex-1 flex flex-col w-full h-full space-y-4 pb-12 md:pb-24">
       <Timer />
       <div className="flex items-center justify-between w-full gap-2 p-4">
         <Actions />
@@ -22,7 +22,7 @@ export default function PlayScreen() {
         <Input />
         <Scrambled />
       </div>
-      <div className="h-9" />
+      <div className="mt-auto" />
       <Options />
     </div>
   )
