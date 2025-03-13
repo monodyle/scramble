@@ -82,6 +82,19 @@ export function useSetGameMode() {
   return useCallback(
     (mode: GameMode) => {
       dispatch({ type: 'SET_MODE', payload: mode })
+      if (mode === 'chill') {
+        dispatch({ type: 'SET_LIVES', payload: Number.POSITIVE_INFINITY })
+        dispatch({ type: 'SET_TIME', payload: Number.POSITIVE_INFINITY })
+      } else if (mode === 'strike') {
+        dispatch({ type: 'SET_LIVES', payload: 3 })
+        dispatch({ type: 'SET_TIME', payload: Number.POSITIVE_INFINITY })
+      } else if (mode === 'rush') {
+        dispatch({ type: 'SET_LIVES', payload: 3 })
+        dispatch({ type: 'SET_TIME', payload: 10 })
+      } else if (mode === 'sprint') {
+        dispatch({ type: 'SET_LIVES', payload: 1 })
+        dispatch({ type: 'SET_TIME', payload: 60 })
+      }
     },
     [dispatch],
   )
@@ -112,29 +125,6 @@ export function useTime() {
   return state.time
 }
 
-export function useSetDefaultSettings() {
-  const { dispatch } = useContext(GameStateContext)
-
-  return useCallback(
-    (mode: GameMode) => {
-      if (mode === 'chill') {
-        dispatch({ type: 'SET_LIVES', payload: Number.POSITIVE_INFINITY })
-        dispatch({ type: 'SET_TIME', payload: Number.POSITIVE_INFINITY })
-      } else if (mode === 'strike') {
-        dispatch({ type: 'SET_LIVES', payload: 3 })
-        dispatch({ type: 'SET_TIME', payload: Number.POSITIVE_INFINITY })
-      } else if (mode === 'rush') {
-        dispatch({ type: 'SET_LIVES', payload: 3 })
-        dispatch({ type: 'SET_TIME', payload: 10 })
-      } else if (mode === 'sprint') {
-        dispatch({ type: 'SET_LIVES', payload: 1 })
-        dispatch({ type: 'SET_TIME', payload: 60 })
-      }
-    },
-    [dispatch],
-  )
-}
-
 export function useResetTimer() {
   const { dispatch } = useContext(GameStateContext)
 
@@ -157,18 +147,12 @@ export function useSetGameStage() {
 export function useStrike() {
   const { dispatch } = useContext(GameStateContext)
   const lives = useLives()
-  const setGameStage = useSetGameStage()
 
   return useCallback(() => {
     const newLives = lives - 1
-    if (newLives === 0) {
-      setGameStage('over')
-    } else {
-      dispatch({ type: 'SET_LIVES', payload: newLives })
-    }
-
+    dispatch({ type: 'SET_LIVES', payload: newLives })
     return newLives
-  }, [dispatch, lives, setGameStage])
+  }, [dispatch, lives])
 }
 
 export function useIncrementScore() {

@@ -5,6 +5,7 @@ import {
   useGameMode,
   useIncrementScore,
   useResetTimer,
+  useSetGameStage,
   useStrike,
 } from '../state/game'
 import { useWordState } from '../state/word'
@@ -46,6 +47,7 @@ export default function useSubmitGuessInput() {
   const { play } = useSound()
   const strike = useStrike()
   const incrementScore = useIncrementScore()
+  const setGameStage = useSetGameStage()
 
   const correct = useCallback(() => {
     setGuessState('correct')
@@ -65,6 +67,9 @@ export default function useSubmitGuessInput() {
     const timeout = gameMode === 'chill' || gameMode === 'rush' ? 1000 : 2000
     setTimeout(() => {
       const left = strike()
+      if (left === 0) {
+        setGameStage('over')
+      }
       if (left > 0 && gameMode === 'rush') {
         resetTimer()
       }
@@ -81,6 +86,7 @@ export default function useSubmitGuessInput() {
     resetTimer,
     nextWord,
     play,
+    setGameStage,
   ])
 
   return useCallback(
