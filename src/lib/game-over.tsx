@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
-import useBackToTitle from './hooks/back-to-title'
-import useStartGame from './hooks/start-game'
-import { useGameMode, useScore } from './state/game'
+import { useStartGame } from './controls/start-game'
+import { useBackToTitle, useGameMode, useScore } from './state/game'
 import JSConfetti from 'js-confetti'
 import { useSound } from './sound'
 

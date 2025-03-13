@@ -1,16 +1,17 @@
 import { ArrowLeft, Volume2, VolumeX } from 'lucide-react'
-import useBackToTitle from '../hooks/back-to-title'
 import { useSound } from '../sound'
+import { useBackToTitle } from '../state/game'
 
 export default function Actions() {
-  const back = useBackToTitle()
+  const backToTitle = useBackToTitle()
   const { isMuted, toggleMute } = useSound()
 
   return (
     <div className="flex gap-1">
       <button
         type="button"
-        onClick={back}
+        onClick={backToTitle}
+        aria-label="Back to title"
         className="p-1 bg-transparent border-none text-primary/60 hover:text-primary"
       >
         <ArrowLeft className="size-5" />
@@ -18,6 +19,7 @@ export default function Actions() {
       <button
         type="button"
         onClick={toggleMute}
+        aria-label="Toggle sound"
         className="p-1 bg-transparent border-none text-primary/60 hover:text-primary"
       >
         {isMuted ? (

@@ -145,3 +145,19 @@ export function useSetDefaultSettings() {
     [dispatch],
   )
 }
+
+export function useResetTimer() {
+  const dispatch = useGameDispatch()
+
+  return useCallback(() => {
+    dispatch({ type: 'SET_TIME', payload: 10 })
+  }, [dispatch])
+}
+
+export function useBackToTitle() {
+  const dispatch = useGameDispatch()
+
+  return useCallback(() => {
+    dispatch({ type: 'SET_STAGE', payload: 'title' })
+  }, [dispatch])
+}

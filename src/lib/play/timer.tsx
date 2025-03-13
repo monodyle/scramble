@@ -1,4 +1,4 @@
-import useSubmitGuessInput from '../hooks/submit-guess-input'
+import useSubmitGuessInput from '../controls/submit-guess-input'
 import { useEffect, useRef, useState } from 'react'
 import { useWord } from '../state/word'
 import { useGameMode, useGameStage, useTime } from '../state/game'

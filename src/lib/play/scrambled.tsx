@@ -1,5 +1,5 @@
 import { ArrowLeftIcon, XIcon } from 'lucide-react'
-import useUpdateGuessInput from '../hooks/update-guess-input'
+import useUpdateGuessInput from '../controls/update-guess-input'
 import { useGuessState } from '../state/guess'
 import { useInput } from '../state/input'
 import { useWord } from '../state/word'

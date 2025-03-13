@@ -4,16 +4,16 @@ import {
   useSetDefaultSettings,
   type GameMode,
 } from '../state/game'
-import { useRandomizeWord } from '../state/word'
+import { useNextWord } from '../state/word'
 import { useInputDispatch } from '../state/input'
 import { useGuessDispatch } from '../state/guess'
 
-export default function useStartGame() {
+export function useStartGame() {
   const gameDispatch = useGameDispatch()
   const setDefaultSettings = useSetDefaultSettings()
   const inputDispatch = useInputDispatch()
   const guessDispatch = useGuessDispatch()
-  const randomizeWord = useRandomizeWord()
+  const nextWord = useNextWord()
 
   return useCallback(
     (mode: GameMode) => {
@@ -27,13 +27,13 @@ export default function useStartGame() {
 
       // Start the game
       gameDispatch({ type: 'SET_STAGE', payload: 'play' })
-      randomizeWord()
+      nextWord()
     },
     [
       gameDispatch,
       inputDispatch,
       guessDispatch,
-      randomizeWord,
+      nextWord,
       setDefaultSettings,
     ],
   )

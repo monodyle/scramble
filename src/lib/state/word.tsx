@@ -6,6 +6,7 @@ import {
   useReducer,
 } from 'react'
 import { useDictionary } from './dictionary'
+import { useResetGuessInput } from './input'
 
 type WordState = {
   word: string
@@ -109,15 +110,15 @@ export function useSetWord() {
   )
 }
 
-export function useRandomizeWord() {
+export function useNextWord() {
+  const resetGuessInput = useResetGuessInput()
   const { list } = useDictionary()
   const dispatch = useWordDispatch()
 
   return useCallback(() => {
-    if (!list.length) {
-      return
-    }
+    if (!list.length) return
     const randomIndex = Math.floor(Math.random() * list.length)
+    resetGuessInput()
     dispatch({ type: 'SET_WORD', payload: list[randomIndex] })
-  }, [list, dispatch])
+  }, [resetGuessInput, list, dispatch])
 }

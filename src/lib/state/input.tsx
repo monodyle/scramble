@@ -1,4 +1,5 @@
 import { createContext, useContext, useReducer, useCallback } from 'react'
+import { useSetGuessState } from './guess'
 
 type InputState = {
   input: string
@@ -99,4 +100,15 @@ export function useInputActions() {
       dispatch({ type: 'RESET_INPUT' })
     }, [dispatch]),
   }
+}
+
+export function useResetGuessInput() {
+  const setGuessState = useSetGuessState()
+  const { setInput, setUsedIndices } = useInputActions()
+
+  return useCallback(() => {
+    setUsedIndices([])
+    setInput('')
+    setGuessState('idle')
+  }, [setGuessState, setInput, setUsedIndices])
 }

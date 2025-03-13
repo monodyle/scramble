@@ -1,4 +1,4 @@
-import useNextWord from '../hooks/next-word'
+import { useNextWord } from '../state/word'
 import { useGameMode } from '../state/game'
 
 export default function Options() {

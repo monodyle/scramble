@@ -1,4 +1,4 @@
-import useStartGame from './hooks/start-game'
+import { useStartGame } from './controls/start-game'
 
 export default function TitleScreen() {
   const start = useStartGame()
