@@ -1,19 +1,19 @@
 import { useEffect, useRef, useState } from 'react'
-import { useStrikes } from '../state/game'
+import { useLives } from '../state/game'
 
-export default function Strikes() {
-  const strikes = useStrikes()
+export default function Lives() {
+  const lives = useLives()
   const [isStriking, setIsStriking] = useState(false)
-  const prevStrikes = useRef(strikes)
+  const prevLives = useRef(lives)
 
   useEffect(() => {
-    if (strikes < prevStrikes.current && strikes !== Number.POSITIVE_INFINITY) {
+    if (lives < prevLives.current && lives !== Number.POSITIVE_INFINITY) {
       setIsStriking(true)
       const timer = setTimeout(() => setIsStriking(false), 400)
       return () => clearTimeout(timer)
     }
-    prevStrikes.current = strikes
-  }, [strikes])
+    prevLives.current = lives
+  }, [lives])
 
   return (
     <div
@@ -29,7 +29,7 @@ export default function Strikes() {
           💔
         </span>
       )}
-      ❤️ × {strikes === Number.POSITIVE_INFINITY ? '∞' : strikes}
+      ❤️ × {lives === Number.POSITIVE_INFINITY ? '∞' : lives}
     </div>
   )
 }

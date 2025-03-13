@@ -4,7 +4,7 @@ import Message from './play/message'
 import Options from './play/options'
 import Score from './play/score'
 import Scrambled from './play/scrambled'
-import Strikes from './play/strikes'
+import Lives from './play/lives'
 import Timer from './play/timer'
 
 export default function PlayScreen() {
@@ -14,7 +14,7 @@ export default function PlayScreen() {
       <div className="flex items-center justify-between w-full gap-2 p-4">
         <Actions />
         <Score />
-        <Strikes />
+        <Lives />
       </div>
       <div className="h-32" />
       <div className="p-4 space-y-4">
@@ -22,7 +22,7 @@ export default function PlayScreen() {
         <Input />
         <Scrambled />
       </div>
-      <div className='h-9' />
+      <div className="h-9" />
       <Options />
     </div>
   )

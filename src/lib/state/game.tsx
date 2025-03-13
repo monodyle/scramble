@@ -7,7 +7,7 @@ type GameState = {
   mode: GameMode
   stage: GameStage
   score: number
-  strikes: number
+  lives: number
   time: number
 }
 
@@ -15,7 +15,7 @@ type GameAction =
   | { type: 'SET_MODE'; payload: GameMode }
   | { type: 'SET_STAGE'; payload: GameStage }
   | { type: 'INCREMENT_SCORE' }
-  | { type: 'SET_STRIKES'; payload: number }
+  | { type: 'SET_LIVES'; payload: number }
   | { type: 'SET_TIME'; payload: number }
   | { type: 'RESET_GAME' }
 
@@ -23,7 +23,7 @@ const initialState: GameState = {
   mode: null,
   stage: 'title',
   score: 0,
-  strikes: 3,
+  lives: 3,
   time: 10,
 }
 
@@ -35,8 +35,8 @@ function reducer(state: GameState, action: GameAction): GameState {
       return { ...state, stage: action.payload }
     case 'INCREMENT_SCORE':
       return { ...state, score: state.score + 1 }
-    case 'SET_STRIKES':
-      return { ...state, strikes: action.payload }
+    case 'SET_LIVES':
+      return { ...state, lives: action.payload }
     case 'SET_TIME':
       return { ...state, time: action.payload }
     case 'RESET_GAME':
@@ -88,43 +88,28 @@ export function useSetGameMode() {
 }
 
 export function useGameMode() {
-  const context = useContext(GameStateContext)
-  if (!context) {
-    throw new Error('useGameMode must be used within a GameStateProvider')
-  }
-  return context.state.mode
+  const { state } = useContext(GameStateContext)
+  return state.mode
 }
 
 export function useGameStage() {
-  const context = useContext(GameStateContext)
-  if (!context) {
-    throw new Error('useGameStage must be used within a GameStateProvider')
-  }
-  return context.state.stage
+  const { state } = useContext(GameStateContext)
+  return state.stage
 }
 
 export function useScore() {
-  const context = useContext(GameStateContext)
-  if (!context) {
-    throw new Error('useScore must be used within a GameStateProvider')
-  }
-  return context.state.score
+  const { state } = useContext(GameStateContext)
+  return state.score
 }
 
-export function useStrikes() {
-  const context = useContext(GameStateContext)
-  if (!context) {
-    throw new Error('useStrikes must be used within a GameStateProvider')
-  }
-  return context.state.strikes
+export function useLives() {
+  const { state } = useContext(GameStateContext)
+  return state.lives
 }
 
 export function useTime() {
-  const context = useContext(GameStateContext)
-  if (!context) {
-    throw new Error('useTime must be used within a GameStateProvider')
-  }
-  return context.state.time
+  const { state } = useContext(GameStateContext)
+  return state.time
 }
 
 export function useSetDefaultSettings() {
@@ -133,16 +118,16 @@ export function useSetDefaultSettings() {
   return useCallback(
     (mode: GameMode) => {
       if (mode === 'chill') {
-        dispatch({ type: 'SET_STRIKES', payload: Number.POSITIVE_INFINITY })
+        dispatch({ type: 'SET_LIVES', payload: Number.POSITIVE_INFINITY })
         dispatch({ type: 'SET_TIME', payload: Number.POSITIVE_INFINITY })
       } else if (mode === 'strike') {
-        dispatch({ type: 'SET_STRIKES', payload: 3 })
+        dispatch({ type: 'SET_LIVES', payload: 3 })
         dispatch({ type: 'SET_TIME', payload: Number.POSITIVE_INFINITY })
       } else if (mode === 'rush') {
-        dispatch({ type: 'SET_STRIKES', payload: 3 })
+        dispatch({ type: 'SET_LIVES', payload: 3 })
         dispatch({ type: 'SET_TIME', payload: 10 })
       } else if (mode === 'sprint') {
-        dispatch({ type: 'SET_STRIKES', payload: 1 })
+        dispatch({ type: 'SET_LIVES', payload: 1 })
         dispatch({ type: 'SET_TIME', payload: 60 })
       }
     },
@@ -171,19 +156,19 @@ export function useSetGameStage() {
 
 export function useStrike() {
   const { dispatch } = useContext(GameStateContext)
-  const strikes = useStrikes()
+  const lives = useLives()
   const setGameStage = useSetGameStage()
 
   return useCallback(() => {
-    const newStrikes = strikes - 1
-    if (newStrikes === 0) {
+    const newLives = lives - 1
+    if (newLives === 0) {
       setGameStage('over')
     } else {
-      dispatch({ type: 'SET_STRIKES', payload: newStrikes })
+      dispatch({ type: 'SET_LIVES', payload: newLives })
     }
 
-    return newStrikes
-  }, [dispatch, strikes, setGameStage])
+    return newLives
+  }, [dispatch, lives, setGameStage])
 }
 
 export function useIncrementScore() {
