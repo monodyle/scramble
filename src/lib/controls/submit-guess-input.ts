@@ -73,6 +73,7 @@ export default function useSubmitGuessInput() {
   const incorrect = useCallback(() => {
     play('incorrect')
     setGuessState('incorrect')
+    const timeout = gameMode === 'chill' || gameMode === 'rush' ? 1000 : 2000
     setTimeout(() => {
       const left = strike()
       if (left > 0 && gameMode === 'rush') {
@@ -82,7 +83,7 @@ export default function useSubmitGuessInput() {
         nextWord()
       }
       resetGuessInput()
-    }, 2000)
+    }, timeout)
   }, [
     setGuessState,
     resetGuessInput,
