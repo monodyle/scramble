@@ -5,6 +5,8 @@ import JSConfetti from 'js-confetti'
 import { useSound } from './sound'
 import { useScore } from './state/score'
 import Name from './name'
+import { getModeLabel } from './mode'
+import { getHighestScore } from './highest-score'
 
 export default function GameOverScreen() {
   const setGameStage = useSetGameStage()
@@ -23,24 +25,28 @@ export default function GameOverScreen() {
 
   return (
     <div
-      className="text-center flex-1 py-24 flex flex-col"
+      className="text-center flex-1 py-24 flex flex-col items-center"
       id="game-over-confetti"
     >
       <Name />
-      <div className="bg-primary py-0.5 rounded text-elevated font-semibold text-sm">
+      <div className="bg-primary px-1 rounded text-elevated font-medium text-sm">
         scramble.takea.cafe
       </div>
 
       <div className="my-auto">
-        <h1 className="font-serif text-3xl font-semibold text-center text-primary">
+        <h1 className="font-serif text-2xl font-semibold text-center text-primary">
           Game Over!
         </h1>
-        <p className="text-primary/60">Better luck next time!</p>
-        <div className="py-9">
-          <p className="text-sm font-medium font-serif uppercase">Score</p>
-          <p className="text-7xl font-serif font-semibold">{score.current}</p>
-          <p className="font-medium font-serif">Best: {score.highest}</p>
-        </div>
+        <span className="font-medium font-serif">
+          Game mode: {getModeLabel(mode)}
+        </span>
+        <p className="font-medium font-serif">Your score was:</p>
+        <p className="text-7xl font-serif font-semibold relative py-3">
+          {score}
+        </p>
+        <p className="font-medium font-serif">
+          Best Score: {getHighestScore(mode)}
+        </p>
       </div>
 
       <div className="flex flex-col items-center gap-2 py-4 mt-auto">

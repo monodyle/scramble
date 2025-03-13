@@ -1,7 +1,7 @@
 import { createContext, useContext, useReducer, useCallback } from 'react'
 import { useResetScore } from './score'
+import type { GameMode } from '../mode'
 
-export type GameMode = 'chill' | 'strike' | 'rush' | 'sprint' | null
 export type GameStage = 'title' | 'play' | 'pause' | 'over'
 
 type GameState = {
@@ -19,7 +19,7 @@ type GameAction =
   | { type: 'RESET_GAME' }
 
 const initialState: GameState = {
-  mode: null,
+  mode: 'rush',
   stage: 'title',
   lives: 3,
   time: 10,

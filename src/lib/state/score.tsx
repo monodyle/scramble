@@ -1,34 +1,21 @@
 import { createContext, useCallback, useContext, useState } from 'react'
 
 const ScoreContext = createContext<{
-  current: number
-  highest: number
+  score: number
   incrementScore: () => void
   resetScore: () => void
 }>({
-  current: 0,
-  highest: 0,
+  score: 0,
   incrementScore: () => {},
   resetScore: () => {},
 })
 
 export function ScoreProvider({ children }: React.PropsWithChildren) {
   const [score, setScore] = useState(0)
-  const [highest, setHighest] = useState(() => {
-    const savedHighestScore = localStorage.getItem('highestScore')
-    return savedHighestScore ? Number.parseInt(savedHighestScore, 10) : 0
-  })
 
   const incrementScore = useCallback(() => {
-    setScore((prevScore) => {
-      const newScore = prevScore + 1
-      if (newScore > highest) {
-        setHighest(newScore)
-        localStorage.setItem('highestScore', newScore.toString())
-      }
-      return newScore
-    })
-  }, [highest])
+    setScore((score) => score + 1)
+  }, [])
 
   const resetScore = useCallback(() => {
     setScore(0)
@@ -36,7 +23,7 @@ export function ScoreProvider({ children }: React.PropsWithChildren) {
 
   return (
     <ScoreContext.Provider
-      value={{ current: score, highest, incrementScore, resetScore }}
+      value={{ score, incrementScore, resetScore }}
     >
       {children}
     </ScoreContext.Provider>
@@ -44,8 +31,8 @@ export function ScoreProvider({ children }: React.PropsWithChildren) {
 }
 
 export function useScore() {
-  const { current, highest } = useContext(ScoreContext)
-  return { current, highest }
+  const { score } = useContext(ScoreContext)
+  return score
 }
 
 export function useIncrementScore() {

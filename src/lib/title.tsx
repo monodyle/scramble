@@ -1,4 +1,5 @@
 import { useStartGame } from './controls/start-game'
+import { getModeLabel } from './mode'
 import Name from './name'
 
 export default function TitleScreen() {
@@ -18,7 +19,7 @@ export default function TitleScreen() {
             className="px-4 py-2 transition-colors transform border border-transparent rounded-lg bg-primary/4 hover:border-border hover:bg-primary/8"
           >
             <h3 className="font-serif text-lg font-semibold text-primary">
-              Chilling
+              {getModeLabel('chill')}
             </h3>
             <p className="text-sm text-primary/60 text-balance">
               Unlimited guesses - Perfect for learning and practice!
@@ -30,7 +31,7 @@ export default function TitleScreen() {
             className="px-4 py-2 transition-colors transform border border-transparent rounded-lg bg-primary/4 hover:border-border hover:bg-primary/8"
           >
             <h3 className="font-serif text-lg font-semibold text-primary">
-              Three Strikes
+              {getModeLabel('strike')}
             </h3>
             <p className="text-sm text-primary/60 text-balance">
               3 strikes, that's it, and you're out
@@ -42,7 +43,7 @@ export default function TitleScreen() {
             className="px-4 py-2 transition-colors transform border border-transparent rounded-lg bg-primary/4 hover:border-border hover:bg-primary/8"
           >
             <h3 className="font-serif text-lg font-semibold text-primary">
-              Rush Riddle
+              {getModeLabel('rush')}
             </h3>
             <p className="text-sm text-primary/60 text-balance">
               10 seconds for each riddle, also 3 strikes
@@ -54,7 +55,7 @@ export default function TitleScreen() {
             className="px-4 py-2 transition-colors transform border border-transparent rounded-lg bg-primary/4 hover:border-border hover:bg-primary/8"
           >
             <h3 className="font-serif text-lg font-semibold text-primary">
-              Sprinter
+              {getModeLabel('sprint')}
             </h3>
             <p className="text-sm text-primary/60 text-balance">
               Try to survive with one strike for 60 seconds
