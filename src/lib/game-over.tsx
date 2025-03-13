@@ -10,7 +10,7 @@ export default function GameOverScreen() {
   const { mode } = useGameSetup()
   const startGame = useStartGame()
   const { play } = useSound()
-  const { score } = useScore()
+  const score = useScore()
 
   useEffect(() => {
     play('complete')
@@ -29,7 +29,8 @@ export default function GameOverScreen() {
 
       <div className="py-9">
         <p className="text-sm font-medium uppercase">Score</p>
-        <p className="text-7xl font-serif font-semibold">{score}</p>
+        <p className="text-7xl font-serif font-semibold">{score.current}</p>
+        <p className="font-medium font-serif">Best: {score.highest}</p>
       </div>
 
       <div className="flex flex-col items-center gap-2 py-4">
