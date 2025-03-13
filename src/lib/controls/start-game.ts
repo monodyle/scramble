@@ -1,40 +1,41 @@
 import { useCallback } from 'react'
 import {
-  useGameDispatch,
+  useResetGame,
   useSetDefaultSettings,
+  useSetGameMode,
+  useSetGameStage,
   type GameMode,
 } from '../state/game'
 import { useNextWord } from '../state/word'
-import { useInputDispatch } from '../state/input'
 import { useGuessDispatch } from '../state/guess'
 
 export function useStartGame() {
-  const gameDispatch = useGameDispatch()
-  const setDefaultSettings = useSetDefaultSettings()
-  const inputDispatch = useInputDispatch()
-  const guessDispatch = useGuessDispatch()
   const nextWord = useNextWord()
+  const resetGame = useResetGame()
+  const setGameMode = useSetGameMode()
+  const guessDispatch = useGuessDispatch()
+  const setDefaultSettings = useSetDefaultSettings()
+  const setGameStage = useSetGameStage()
 
   return useCallback(
     (mode: GameMode) => {
-      gameDispatch({ type: 'RESET_GAME' })
-      inputDispatch({ type: 'RESET_INPUT' })
+      resetGame()
       guessDispatch({ type: 'RESET_GUESS' })
 
-      gameDispatch({ type: 'SET_MODE', payload: mode })
+      setGameMode(mode)
 
       setDefaultSettings(mode)
 
-      // Start the game
-      gameDispatch({ type: 'SET_STAGE', payload: 'play' })
+      setGameStage('play')
       nextWord()
     },
     [
-      gameDispatch,
-      inputDispatch,
+      resetGame,
       guessDispatch,
       nextWord,
       setDefaultSettings,
+      setGameMode,
+      setGameStage,
     ],
   )
 }

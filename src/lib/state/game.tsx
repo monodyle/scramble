@@ -55,7 +55,14 @@ function gameReducer(state: GameState, action: GameAction): GameState {
 const GameStateContext = createContext<{
   state: GameState
   dispatch: React.Dispatch<GameAction>
-} | null>(null)
+}>({
+  state: initialState,
+  dispatch: () => {
+    throw new Error(
+      'GameStateContext dispatch must be used within a GameStateProvider',
+    )
+  },
+})
 
 export function GameStateProvider({ children }: React.PropsWithChildren) {
   const [state, dispatch] = useReducer(gameReducer, initialState)
@@ -75,12 +82,23 @@ export function useGameState() {
   return context.state
 }
 
-export function useGameDispatch() {
-  const context = useContext(GameStateContext)
-  if (!context) {
-    throw new Error('useGameDispatch must be used within a GameStateProvider')
-  }
-  return context.dispatch
+export function useResetGame() {
+  const { dispatch } = useContext(GameStateContext)
+
+  return useCallback(() => {
+    dispatch({ type: 'RESET_GAME' })
+  }, [dispatch])
+}
+
+export function useSetGameMode() {
+  const { dispatch } = useContext(GameStateContext)
+
+  return useCallback(
+    (mode: GameMode) => {
+      dispatch({ type: 'SET_MODE', payload: mode })
+    },
+    [dispatch],
+  )
 }
 
 export function useGameMode() {
@@ -124,7 +142,7 @@ export function useTime() {
 }
 
 export function useSetDefaultSettings() {
-  const dispatch = useGameDispatch()
+  const { dispatch } = useContext(GameStateContext)
 
   return useCallback(
     (mode: GameMode) => {
@@ -147,17 +165,45 @@ export function useSetDefaultSettings() {
 }
 
 export function useResetTimer() {
-  const dispatch = useGameDispatch()
+  const { dispatch } = useContext(GameStateContext)
 
   return useCallback(() => {
     dispatch({ type: 'SET_TIME', payload: 10 })
   }, [dispatch])
 }
 
-export function useBackToTitle() {
-  const dispatch = useGameDispatch()
+export function useSetGameStage() {
+  const { dispatch } = useContext(GameStateContext)
+
+  return useCallback(
+    (stage: GameStage) => {
+      dispatch({ type: 'SET_STAGE', payload: stage })
+    },
+    [dispatch],
+  )
+}
+
+export function useStrike() {
+  const { dispatch } = useContext(GameStateContext)
+  const strikes = useStrikes()
+  const setGameStage = useSetGameStage()
 
   return useCallback(() => {
-    dispatch({ type: 'SET_STAGE', payload: 'title' })
+    const newStrikes = strikes - 1
+    if (newStrikes === 0) {
+      setGameStage('over')
+    } else {
+      dispatch({ type: 'SET_STRIKES', payload: newStrikes })
+    }
+
+    return newStrikes
+  }, [dispatch, strikes, setGameStage])
+}
+
+export function useIncrementScore() {
+  const { dispatch } = useContext(GameStateContext)
+
+  return useCallback(() => {
+    dispatch({ type: 'INCREMENT_SCORE' })
   }, [dispatch])
 }

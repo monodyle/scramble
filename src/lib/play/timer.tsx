@@ -13,7 +13,7 @@ function Progression() {
   const submitGuessInput = useSubmitGuessInput()
 
   useEffect(() => {
-    if (timeLeft === Number.POSITIVE_INFINITY || stage !== 'over') {
+    if (timeLeft === Number.POSITIVE_INFINITY || stage !== 'play') {
       return
     }
 

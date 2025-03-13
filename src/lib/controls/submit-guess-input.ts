@@ -1,12 +1,16 @@
 import { useCallback } from 'react'
 import { useSound } from '../sound'
 import { useSetGuessState } from '../state/guess'
-import { useGameDispatch, useGameMode, useStrikes } from '../state/game'
+import {
+  useGameMode,
+  useIncrementScore,
+  useResetTimer,
+  useStrike,
+} from '../state/game'
 import { useWord } from '../state/word'
 import { useDictionary } from '../state/dictionary'
 import { useNextWord } from '../state/word'
 import { useResetGuessInput } from '../state/input'
-import { useResetTimer } from '../state/game'
 
 function getLetterFrequency(word: string): Map<string, number> {
   const freq = new Map<string, number>()
@@ -36,39 +40,24 @@ export default function useSubmitGuessInput() {
   const { set } = useDictionary()
   const resetGuessInput = useResetGuessInput()
   const setGuessState = useSetGuessState()
-  const dispatch = useGameDispatch()
   const nextWord = useNextWord()
   const gameMode = useGameMode()
   const resetTimer = useResetTimer()
   const { play } = useSound()
-
-  const strikes = useStrikes()
-
-  const strike = useCallback(() => {
-    const newStrikes = strikes - 1
-    if (newStrikes === 0) {
-      dispatch({ type: 'SET_STAGE', payload: 'over' })
-    } else {
-      dispatch({
-        type: 'SET_STRIKES',
-        payload: newStrikes,
-      })
-    }
-
-    return newStrikes
-  }, [dispatch, strikes])
+  const strike = useStrike()
+  const incrementScore = useIncrementScore()
 
   const correct = useCallback(() => {
     setGuessState('correct')
     play('correct')
     setTimeout(() => {
-      dispatch({ type: 'INCREMENT_SCORE' })
+      incrementScore()
       if (gameMode === 'rush') {
         resetTimer()
       }
       nextWord()
     }, 1000)
-  }, [setGuessState, gameMode, nextWord, resetTimer, play, dispatch])
+  }, [setGuessState, gameMode, nextWord, resetTimer, play, incrementScore])
 
   const incorrect = useCallback(() => {
     play('incorrect')

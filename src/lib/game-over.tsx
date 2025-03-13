@@ -1,11 +1,11 @@
 import { useEffect } from 'react'
 import { useStartGame } from './controls/start-game'
-import { useBackToTitle, useGameMode, useScore } from './state/game'
+import { useSetGameStage, useGameMode, useScore } from './state/game'
 import JSConfetti from 'js-confetti'
 import { useSound } from './sound'
 
 export default function GameOverScreen() {
-  const backToTitle = useBackToTitle()
+  const setGameStage = useSetGameStage()
   const gameMode = useGameMode()
   const startGame = useStartGame()
   const score = useScore()
@@ -42,7 +42,7 @@ export default function GameOverScreen() {
         <button
           type="button"
           className="px-4 py-1.5 font-serif font-semibold transition-colors transform rounded-lg text-primary bg-primary/4 hover:bg-primary/8 w-36"
-          onClick={backToTitle}
+          onClick={() => setGameStage('title')}
         >
           Back to Title
         </button>

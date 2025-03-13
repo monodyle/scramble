@@ -1,16 +1,16 @@
 import { ArrowLeft, Volume2, VolumeX } from 'lucide-react'
 import { useSound } from '../sound'
-import { useBackToTitle } from '../state/game'
+import { useSetGameStage } from '../state/game'
 
 export default function Actions() {
-  const backToTitle = useBackToTitle()
+  const setGameStage = useSetGameStage()
   const { isMuted, toggleMute } = useSound()
 
   return (
     <div className="flex gap-1">
       <button
         type="button"
-        onClick={backToTitle}
+        onClick={() => setGameStage('title')}
         aria-label="Back to title"
         className="p-1 bg-transparent border-none text-primary/60 hover:text-primary"
       >
