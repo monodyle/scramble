@@ -1,23 +1,12 @@
 import { useStartGame } from './controls/start-game'
+import Name from './name'
 
 export default function TitleScreen() {
   const start = useStartGame()
 
   return (
     <div className="space-y-4">
-      <h1 className="font-serif text-3xl font-semibold text-center">
-        {'Scramble!'.split('').map((char, i) => (
-          <span
-            key={i}
-            className="inline-block transition-transform hover:scale-110"
-            style={{
-              transform: `rotate(${Math.sin(i * 1.5) * 8}deg)`,
-            }}
-          >
-            {char}
-          </span>
-        ))}
-      </h1>
+      <Name />
       <h2 className="font-serif text-xl font-bold text-center text-primary">
         Game Modes
       </h2>

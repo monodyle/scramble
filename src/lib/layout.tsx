@@ -6,8 +6,8 @@ export default function Layout({ children }: React.PropsWithChildren) {
           {children}
         </div>
       </div>
-      <footer className="px-5 py-4">
-        <p className="text-sm text-center text-primary/60">
+      <footer className="px-5 py-2">
+        <p className="text-sm text-center text-primary/40">
           <a
             href="https://github.com/monodyle/scramble"
             target="_blank"
