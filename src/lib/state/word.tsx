@@ -16,7 +16,6 @@ type WordState = {
 type WordAction =
   | { type: 'SET_WORD'; payload: string }
   | { type: 'SCRAMBLE_WORD' }
-  | { type: 'RESET_WORD' }
 
 const initialState: WordState = {
   word: 'hello',
@@ -49,8 +48,6 @@ function wordReducer(state: WordState, action: WordAction): WordState {
         ...state,
         scrambled: scramble(state.word),
       }
-    case 'RESET_WORD':
-      return initialState
     default:
       return state
   }
@@ -59,7 +56,12 @@ function wordReducer(state: WordState, action: WordAction): WordState {
 const WordContext = createContext<{
   state: WordState
   dispatch: React.Dispatch<WordAction>
-} | null>(null)
+}>({
+  state: initialState,
+  dispatch: () => {
+    throw new Error('WordContext dispatch must be used within a WordProvider')
+  },
+})
 
 export function WordProvider({ children }: React.PropsWithChildren) {
   const [state, dispatch] = useReducer(wordReducer, initialState)
@@ -77,43 +79,14 @@ export function WordProvider({ children }: React.PropsWithChildren) {
 }
 
 export function useWordState() {
-  const context = useContext(WordContext)
-  if (!context) {
-    throw new Error('useWordState must be used within a WordProvider')
-  }
-  return context.state
-}
-
-export function useWordDispatch() {
-  const context = useContext(WordContext)
-  if (!context) {
-    throw new Error('useWordDispatch must be used within a WordProvider')
-  }
-  return context.dispatch
-}
-
-export function useWord() {
-  const context = useContext(WordContext)
-  if (!context) {
-    throw new Error('useWord must be used within a WordProvider')
-  }
-  return context.state
-}
-
-export function useSetWord() {
-  const dispatch = useWordDispatch()
-  return useCallback(
-    (word: string) => {
-      dispatch({ type: 'SET_WORD', payload: word })
-    },
-    [dispatch],
-  )
+  const { state } = useContext(WordContext)
+  return state
 }
 
 export function useNextWord() {
   const resetGuessInput = useResetGuessInput()
   const { list } = useDictionary()
-  const dispatch = useWordDispatch()
+  const { dispatch } = useContext(WordContext)
 
   return useCallback(() => {
     if (!list.length) return

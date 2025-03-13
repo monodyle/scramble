@@ -2,10 +2,10 @@ import { ArrowLeftIcon, XIcon } from 'lucide-react'
 import useUpdateGuessInput from '../controls/update-guess-input'
 import { useGuessState } from '../state/guess'
 import { useInput } from '../state/input'
-import { useWord } from '../state/word'
+import { useWordState } from '../state/word'
 
 export default function Scrambled() {
-  const { scrambled } = useWord()
+  const { scrambled } = useWordState()
   const { update, backspace, clear } = useUpdateGuessInput()
   const { usedIndices } = useInput()
   const guessState = useGuessState()

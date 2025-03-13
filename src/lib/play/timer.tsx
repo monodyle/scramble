@@ -1,6 +1,6 @@
 import useSubmitGuessInput from '../controls/submit-guess-input'
 import { useEffect, useRef, useState } from 'react'
-import { useWord } from '../state/word'
+import { useWordState } from '../state/word'
 import { useGameMode, useGameStage, useTime } from '../state/game'
 
 function Progression() {
@@ -59,7 +59,7 @@ function Progression() {
 
 export default function Timer() {
   const gameMode = useGameMode()
-  const { word } = useWord()
+  const { word } = useWordState()
 
   if (gameMode === 'rush') {
     return <Progression key={word} />

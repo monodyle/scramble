@@ -7,7 +7,7 @@ import {
   useResetTimer,
   useStrike,
 } from '../state/game'
-import { useWord } from '../state/word'
+import { useWordState } from '../state/word'
 import { useDictionary } from '../state/dictionary'
 import { useNextWord } from '../state/word'
 import { useResetGuessInput } from '../state/input'
@@ -36,7 +36,7 @@ function hasSameScramble(word1: string, word2: string): boolean {
 }
 
 export default function useSubmitGuessInput() {
-  const { word } = useWord()
+  const { word } = useWordState()
   const { set } = useDictionary()
   const resetGuessInput = useResetGuessInput()
   const setGuessState = useSetGuessState()

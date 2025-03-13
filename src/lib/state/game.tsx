@@ -14,9 +14,7 @@ type GameState = {
 type GameAction =
   | { type: 'SET_MODE'; payload: GameMode }
   | { type: 'SET_STAGE'; payload: GameStage }
-  | { type: 'SET_SCORE'; payload: number }
   | { type: 'INCREMENT_SCORE' }
-  | { type: 'RESET_SCORE' }
   | { type: 'SET_STRIKES'; payload: number }
   | { type: 'SET_TIME'; payload: number }
   | { type: 'RESET_GAME' }
@@ -29,18 +27,14 @@ const initialState: GameState = {
   time: 10,
 }
 
-function gameReducer(state: GameState, action: GameAction): GameState {
+function reducer(state: GameState, action: GameAction): GameState {
   switch (action.type) {
     case 'SET_MODE':
       return { ...state, mode: action.payload }
     case 'SET_STAGE':
       return { ...state, stage: action.payload }
-    case 'SET_SCORE':
-      return { ...state, score: action.payload }
     case 'INCREMENT_SCORE':
       return { ...state, score: state.score + 1 }
-    case 'RESET_SCORE':
-      return { ...state, score: 0 }
     case 'SET_STRIKES':
       return { ...state, strikes: action.payload }
     case 'SET_TIME':
@@ -65,21 +59,13 @@ const GameStateContext = createContext<{
 })
 
 export function GameStateProvider({ children }: React.PropsWithChildren) {
-  const [state, dispatch] = useReducer(gameReducer, initialState)
+  const [state, dispatch] = useReducer(reducer, initialState)
 
   return (
     <GameStateContext.Provider value={{ state, dispatch }}>
       {children}
     </GameStateContext.Provider>
   )
-}
-
-export function useGameState() {
-  const context = useContext(GameStateContext)
-  if (!context) {
-    throw new Error('useGameState must be used within a GameStateProvider')
-  }
-  return context.state
 }
 
 export function useResetGame() {

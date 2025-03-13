@@ -2,11 +2,11 @@ import { useEffect } from 'react'
 import useUpdateGuessInput from '../controls/update-guess-input'
 import { useGuessState } from '../state/guess'
 import { useInput } from '../state/input'
-import { useWord } from '../state/word'
+import { useWordState } from '../state/word'
 import { useGameMode } from '../state/game'
 
 export default function Input() {
-  const { word, scrambled } = useWord()
+  const { word, scrambled } = useWordState()
   const { input, usedIndices } = useInput()
   const guessState = useGuessState()
   const gameMode = useGameMode()
