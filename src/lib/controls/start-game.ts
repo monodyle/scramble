@@ -7,31 +7,28 @@ import {
   type GameMode,
 } from '../state/game'
 import { useNextWord } from '../state/word'
-import { useGuessDispatch } from '../state/guess'
+import { useResetGuessState } from '../state/guess'
 
 export function useStartGame() {
   const nextWord = useNextWord()
   const resetGame = useResetGame()
   const setGameMode = useSetGameMode()
-  const guessDispatch = useGuessDispatch()
+  const resetGuessState = useResetGuessState()
   const setDefaultSettings = useSetDefaultSettings()
   const setGameStage = useSetGameStage()
 
   return useCallback(
     (mode: GameMode) => {
       resetGame()
-      guessDispatch({ type: 'RESET_GUESS' })
-
+      resetGuessState()
       setGameMode(mode)
-
       setDefaultSettings(mode)
-
       setGameStage('play')
       nextWord()
     },
     [
       resetGame,
-      guessDispatch,
+      resetGuessState,
       nextWord,
       setDefaultSettings,
       setGameMode,

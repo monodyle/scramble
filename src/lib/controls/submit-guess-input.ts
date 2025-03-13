@@ -20,7 +20,7 @@ function getLetterFrequency(word: string): Map<string, number> {
   return freq
 }
 
-function canFormSameLetters(word1: string, word2: string): boolean {
+function hasSameScramble(word1: string, word2: string): boolean {
   if (word1.length !== word2.length) return false
 
   const freq1 = getLetterFrequency(word1)
@@ -94,7 +94,7 @@ export default function useSubmitGuessInput() {
       }
 
       if (
-        canFormSameLetters(normalizedInput, normalizedWord) &&
+        hasSameScramble(normalizedInput, normalizedWord) &&
         set.has(normalizedInput)
       ) {
         correct()

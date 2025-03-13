@@ -11,10 +11,13 @@ type GuessAction =
   | { type: 'RESET_GUESS' }
 
 const initialState: GuessContextState = {
-  state: 'idle'
+  state: 'idle',
 }
 
-function guessReducer(state: GuessContextState, action: GuessAction): GuessContextState {
+function guessReducer(
+  state: GuessContextState,
+  action: GuessAction,
+): GuessContextState {
   switch (action.type) {
     case 'SET_GUESS_STATE':
       return { ...state, state: action.payload }
@@ -28,7 +31,14 @@ function guessReducer(state: GuessContextState, action: GuessAction): GuessConte
 const GuessContext = createContext<{
   state: GuessContextState
   dispatch: React.Dispatch<GuessAction>
-} | null>(null)
+}>({
+  state: initialState,
+  dispatch: () => {
+    throw new Error(
+      'GuessContext dispatch must be used within a GuessStateProvider',
+    )
+  },
+})
 
 export function GuessStateProvider({ children }: React.PropsWithChildren) {
   const [state, dispatch] = useReducer(guessReducer, initialState)
@@ -48,24 +58,19 @@ export function useGuessState() {
   return context.state.state
 }
 
-export function useGuessDispatch() {
-  const context = useContext(GuessContext)
-  if (!context) {
-    throw new Error('useGuessDispatch must be used within a GuessStateProvider')
-  }
-  return context.dispatch
-}
-
 export function useSetGuessState() {
-  const dispatch = useGuessDispatch()
+  const { dispatch } = useContext(GuessContext)
 
-  return useCallback((state: GuessState) => {
-    dispatch({ type: 'SET_GUESS_STATE', payload: state })
-  }, [dispatch])
+  return useCallback(
+    (state: GuessState) => {
+      dispatch({ type: 'SET_GUESS_STATE', payload: state })
+    },
+    [dispatch],
+  )
 }
 
 export function useResetGuessState() {
-  const dispatch = useGuessDispatch()
+  const { dispatch } = useContext(GuessContext)
 
   return useCallback(() => {
     dispatch({ type: 'RESET_GUESS' })
