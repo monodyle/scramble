@@ -2,8 +2,7 @@ import { useCallback } from 'react'
 import { useSound } from '../sound'
 import { useSetGuessState } from '../state/guess'
 import {
-  useGameMode,
-  useIncrementScore,
+  useGameSetup,
   useResetTimer,
   useSetGameStage,
   useStrike,
@@ -12,6 +11,7 @@ import { useWordState } from '../state/word'
 import { useDictionary } from '../state/dictionary'
 import { useNextWord } from '../state/word'
 import { useResetGuessInput } from '../state/input'
+import { useIncrementScore } from '../state/score'
 
 function getLetterFrequency(word: string): Map<string, number> {
   const freq = new Map<string, number>()
@@ -42,7 +42,7 @@ export default function useSubmitGuessInput() {
   const resetGuessInput = useResetGuessInput()
   const setGuessState = useSetGuessState()
   const nextWord = useNextWord()
-  const gameMode = useGameMode()
+  const { mode } = useGameSetup()
   const resetTimer = useResetTimer()
   const { play } = useSound()
   const strike = useStrike()
@@ -54,26 +54,26 @@ export default function useSubmitGuessInput() {
     play('correct')
     setTimeout(() => {
       incrementScore()
-      if (gameMode === 'rush') {
+      if (mode === 'rush') {
         resetTimer()
       }
       nextWord()
     }, 1000)
-  }, [setGuessState, gameMode, nextWord, resetTimer, play, incrementScore])
+  }, [setGuessState, mode, nextWord, resetTimer, play, incrementScore])
 
   const incorrect = useCallback(() => {
     play('incorrect')
     setGuessState('incorrect')
-    const timeout = gameMode === 'chill' || gameMode === 'rush' ? 1000 : 2000
+    const timeout = mode === 'chill' || mode === 'rush' ? 1000 : 2000
     setTimeout(() => {
       const left = strike()
       if (left === 0) {
         setGameStage('over')
       }
-      if (left > 0 && gameMode === 'rush') {
+      if (left > 0 && mode === 'rush') {
         resetTimer()
       }
-      if (gameMode !== 'chill') {
+      if (mode !== 'chill') {
         nextWord()
       }
       resetGuessInput()
@@ -81,7 +81,7 @@ export default function useSubmitGuessInput() {
   }, [
     setGuessState,
     resetGuessInput,
-    gameMode,
+    mode,
     strike,
     resetTimer,
     nextWord,

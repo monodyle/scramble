@@ -1,15 +1,16 @@
 import { useEffect } from 'react'
 import { useStartGame } from './controls/start-game'
-import { useSetGameStage, useGameMode, useScore } from './state/game'
+import { useSetGameStage, useGameSetup } from './state/game'
 import JSConfetti from 'js-confetti'
 import { useSound } from './sound'
+import { useScore } from './state/score'
 
 export default function GameOverScreen() {
   const setGameStage = useSetGameStage()
-  const gameMode = useGameMode()
+  const { mode } = useGameSetup()
   const startGame = useStartGame()
-  const score = useScore()
   const { play } = useSound()
+  const { score } = useScore()
 
   useEffect(() => {
     play('complete')
@@ -35,7 +36,7 @@ export default function GameOverScreen() {
         <button
           type="button"
           className="px-4 py-1.5 font-serif font-semibold transition-colors transform rounded-lg text-elevated bg-primary hover:bg-primary/80 w-36"
-          onClick={() => startGame(gameMode)}
+          onClick={() => startGame(mode)}
         >
           Play Again
         </button>

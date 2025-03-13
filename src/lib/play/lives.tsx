@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
-import { useLives } from '../state/game'
+import { useGameSetup } from '../state/game'
 
 export default function Lives() {
-  const lives = useLives()
+  const { lives } = useGameSetup()
   const [isStriking, setIsStriking] = useState(false)
   const prevLives = useRef(lives)
 

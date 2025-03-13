@@ -1,11 +1,11 @@
 import { useNextWord } from '../state/word'
-import { useGameMode } from '../state/game'
+import { useGameSetup } from '../state/game'
 
 export default function Options() {
-  const gameMode = useGameMode()
+  const { mode } = useGameSetup()
   const nextWord = useNextWord()
 
-  if (gameMode !== 'chill') {
+  if (mode !== 'chill') {
     return null
   }
 

@@ -1,4 +1,5 @@
 import { createContext, useContext, useReducer, useCallback } from 'react'
+import { useResetScore } from './score'
 
 export type GameMode = 'chill' | 'strike' | 'rush' | 'sprint' | null
 export type GameStage = 'title' | 'play' | 'pause' | 'over'
@@ -6,7 +7,6 @@ export type GameStage = 'title' | 'play' | 'pause' | 'over'
 type GameState = {
   mode: GameMode
   stage: GameStage
-  score: number
   lives: number
   time: number
 }
@@ -14,7 +14,6 @@ type GameState = {
 type GameAction =
   | { type: 'SET_MODE'; payload: GameMode }
   | { type: 'SET_STAGE'; payload: GameStage }
-  | { type: 'INCREMENT_SCORE' }
   | { type: 'SET_LIVES'; payload: number }
   | { type: 'SET_TIME'; payload: number }
   | { type: 'RESET_GAME' }
@@ -22,7 +21,6 @@ type GameAction =
 const initialState: GameState = {
   mode: null,
   stage: 'title',
-  score: 0,
   lives: 3,
   time: 10,
 }
@@ -33,8 +31,6 @@ function reducer(state: GameState, action: GameAction): GameState {
       return { ...state, mode: action.payload }
     case 'SET_STAGE':
       return { ...state, stage: action.payload }
-    case 'INCREMENT_SCORE':
-      return { ...state, score: state.score + 1 }
     case 'SET_LIVES':
       return { ...state, lives: action.payload }
     case 'SET_TIME':
@@ -70,10 +66,12 @@ export function GameStateProvider({ children }: React.PropsWithChildren) {
 
 export function useResetGame() {
   const { dispatch } = useContext(GameStateContext)
+  const resetScore = useResetScore()
 
   return useCallback(() => {
     dispatch({ type: 'RESET_GAME' })
-  }, [dispatch])
+    resetScore()
+  }, [dispatch, resetScore])
 }
 
 export function useSetGameMode() {
@@ -100,29 +98,9 @@ export function useSetGameMode() {
   )
 }
 
-export function useGameMode() {
+export function useGameSetup() {
   const { state } = useContext(GameStateContext)
-  return state.mode
-}
-
-export function useGameStage() {
-  const { state } = useContext(GameStateContext)
-  return state.stage
-}
-
-export function useScore() {
-  const { state } = useContext(GameStateContext)
-  return state.score
-}
-
-export function useLives() {
-  const { state } = useContext(GameStateContext)
-  return state.lives
-}
-
-export function useTime() {
-  const { state } = useContext(GameStateContext)
-  return state.time
+  return state
 }
 
 export function useResetTimer() {
@@ -146,19 +124,11 @@ export function useSetGameStage() {
 
 export function useStrike() {
   const { dispatch } = useContext(GameStateContext)
-  const lives = useLives()
+  const { lives } = useGameSetup()
 
   return useCallback(() => {
     const newLives = lives - 1
     dispatch({ type: 'SET_LIVES', payload: newLives })
     return newLives
   }, [dispatch, lives])
-}
-
-export function useIncrementScore() {
-  const { dispatch } = useContext(GameStateContext)
-
-  return useCallback(() => {
-    dispatch({ type: 'INCREMENT_SCORE' })
-  }, [dispatch])
 }

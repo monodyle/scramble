@@ -3,13 +3,13 @@ import useUpdateGuessInput from '../controls/update-guess-input'
 import { useGuessState } from '../state/guess'
 import { useInput } from '../state/input'
 import { useWordState } from '../state/word'
-import { useGameMode } from '../state/game'
+import { useGameSetup } from '../state/game'
 
 export default function Input() {
   const { word, scrambled } = useWordState()
   const { input, usedIndices } = useInput()
   const guessState = useGuessState()
-  const gameMode = useGameMode()
+  const { mode } = useGameSetup()
   const { update, backspace, popout } = useUpdateGuessInput()
 
   useEffect(() => {
@@ -45,7 +45,7 @@ export default function Input() {
     guessState,
   ])
 
-  const showAnswer = guessState === 'incorrect' && gameMode !== 'chill'
+  const showAnswer = guessState === 'incorrect' && mode !== 'chill'
 
   return (
     <div className="flex items-center justify-center gap-1">
