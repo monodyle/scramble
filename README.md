@@ -4,8 +4,8 @@
 	</a>
 	<br />
 	<a href="https://scramble.takea.cafe/">
-	  <sup>scramble game</sup>
+	  <sup>scramble.takea.cafe</sup>
 	</a>
   <br />
-  <sup>guess the chaos!<sup>
+  <sup>scramble—guess the chaos!<sup>
 </p>
