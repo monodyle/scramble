@@ -25,7 +25,7 @@ export default function GameOverScreen() {
 
   return (
     <div
-      className="text-center flex-1 py-24 flex flex-col items-center"
+      className="text-center flex-1 py-12 md:py-24 flex flex-col items-center"
       id="game-over-confetti"
     >
       <Name />
