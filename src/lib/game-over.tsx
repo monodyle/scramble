@@ -30,7 +30,7 @@ export default function GameOverScreen() {
     >
       <Name />
       <div className="bg-primary px-1 rounded text-elevated font-medium text-sm">
-        scramble.takea.cafe
+        thescramblegame.com
       </div>
 
       <div className="my-auto">

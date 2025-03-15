@@ -9,7 +9,7 @@ export default function TitleScreen() {
     <div className="flex-1 flex flex-col items-center py-12 md:py-24">
       <Name />
       <div className="bg-primary px-1 rounded text-elevated font-medium text-sm">
-        scramble.takea.cafe
+        thescramblegame.com
       </div>
       <div className="space-y-4 my-auto">
         <h2 className="font-serif text-xl font-bold text-center text-primary">

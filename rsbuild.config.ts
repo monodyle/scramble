@@ -83,14 +83,14 @@ export default defineConfig({
         tag: 'meta',
         attrs: {
           property: 'og:url',
-          content: 'https://scramble.takea.cafe',
+          content: 'https://thescramblegame.com',
         },
       },
       {
         tag: 'meta',
         attrs: {
           property: 'og:image',
-          content: 'https://scramble.takea.cafe/preview.jpg',
+          content: 'https://thescramblegame.com/preview.jpg',
         },
       },
       {
@@ -104,7 +104,7 @@ export default defineConfig({
         tag: 'meta',
         attrs: {
           property: 'twitter:url',
-          content: 'https://scramble.takea.cafe',
+          content: 'https://thescramblegame.com',
         },
       },
       {
@@ -125,7 +125,7 @@ export default defineConfig({
         tag: 'meta',
         attrs: {
           property: 'twitter:image',
-          content: 'https://scramble.takea.cafe/preview.jpg',
+          content: 'https://thescramblegame.com/preview.jpg',
         },
       },
       {
